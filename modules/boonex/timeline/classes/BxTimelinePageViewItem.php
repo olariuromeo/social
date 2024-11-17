@@ -31,7 +31,7 @@ class BxTimelinePageViewItem extends BxTemplPage
         $this->_iItemId = $iItemId;
         $this->_aItemData = $this->_oModule->getItemData($this->_iItemId);
     }
-    
+
     protected function _isAvailablePage ($a)
     {
         if (!$this->_iItemId || $this->_aItemData['code'] == 1)
@@ -39,12 +39,12 @@ class BxTimelinePageViewItem extends BxTemplPage
 
         return parent::_isAvailablePage($a);
     }
-    
+
     protected function _isVisiblePage ($a)
     {
         $CNF = &$this->_oModule->_oConfig->CNF;
 
-        if($this->_aItemData['code'] == 2)
+        if(!$this->_iItemId || $this->_aItemData['code'] == 2)
             return false;
 
         $oCf = BxDolContentFilter::getInstance();
@@ -53,10 +53,12 @@ class BxTimelinePageViewItem extends BxTemplPage
 
         return parent::_isVisiblePage($a);
     }
-    
 
     public function getCode()
     {
+        if(empty($this->_aItemData) || !is_array($this->_aItemData))
+            $this->_oTemplate->displayPageNotFound();
+
         if($this->_aItemData['code'] != 0) {
             switch($this->_aItemData['code']) {
                 case 1:

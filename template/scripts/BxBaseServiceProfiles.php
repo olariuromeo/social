@@ -1039,7 +1039,8 @@ class BxBaseServiceProfiles extends BxDol
             'profile_template' => &$sProfileTemplate,
             'profiles' => &$aProfiles
         ));
-        
+
+        $aProfilesData = [];
         foreach ($aProfiles as $aProfile) {
             if (!$bShowAll && $iActiveProfileId == $aProfile['id'])
                 continue;
@@ -1185,6 +1186,12 @@ class BxBaseServiceProfiles extends BxDol
     public function serviceIsEnabledCfilter()
     {
         return BxDolContentFilter::getInstance()->isEnabled();
+    }
+
+    public function serviceProfileCounters()
+    {
+        if(bx_is_api() && ($oLiveUpdates = BxDolLiveUpdates::getInstance()) !== false)
+            return $oLiveUpdates->performApi();
     }
 
     public function serviceUpdateSettings($iProfileId = false, $sSettings = '')

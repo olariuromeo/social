@@ -365,7 +365,7 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
     {
         $oModule = $this->getModule();
 
-        if(bx_is_api()) {
+        if($this->_bIsApi) {
             if(defined('BX_API_PAGE'))
                 return [];
 
@@ -376,11 +376,14 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
             $oMenuManage = BxDolMenu::getObjectInstance($this->_oConfig->getObject('menu_item_manage'));
 
             $aPosts = $this->getPosts(array_merge($aParams, ['return_data_type' => 'array']));
-            foreach($aPosts as &$aPost)
-                $aPost = $this->_getPostApi($aPost, $aParams, [
+            foreach($aPosts as &$aPost) {
+                $aPost = array_merge($aPost, [
                     'menu_actions' => $oMenuActions,
                     'menu_manage' => $oMenuManage
                 ]);
+
+                $aPost = $this->_getPostApi($aPost, $aParams);
+            }
 
             return $aPosts;
         }
@@ -745,6 +748,9 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
     {
         $CNF = &$this->_oConfig->CNF;
 
+        if(empty($aEvent) || !is_array($aEvent))
+            return '';
+
         $iEventId = (int)$aEvent[$CNF['FIELD_ID']];
         $iViewerId = isset($aBrowseParams['viewer_id']) ? (int)$aBrowseParams['viewer_id'] : bx_get_logged_profile_id();
 
@@ -805,6 +811,11 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
 
         self::$_aMemoryCacheItems[$sMemoryCacheItemsKey] = $this->_getPost($aEvent['content_type'], $aEvent, $aBrowseParams);
         return self::$_aMemoryCacheItems[$sMemoryCacheItemsKey];
+    }
+
+    public function getPostApi($aEvent, $aParams = [])
+    {
+        return $this->_getPostApi($aEvent, $aParams);
     }
 
     public function getPosts($aParams)
@@ -1978,7 +1989,7 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
         return $this->parseHtmlByContent($sTmplCode, $aTmplVars);
     }
 
-    public function _getPostApi(&$aEvent, $aParams = [], $aEventAdd = [])
+    protected function _getPostApi(&$aEvent, $aParams = [])
     {
         $oModule = $this->getModule();
         $bViewItem = isset($aParams['view']) && $aParams['view'] == BX_TIMELINE_VIEW_ITEM;
@@ -2017,52 +2028,66 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                     $aEvent['content']['embed'] = $oEmbed->getLinkHTML(current($aEvent['content']['links'])['url']);
             }
 
-            if ($aEvent['content']['embed'] == '')
+            if (empty($aEvent['content']['embed']))
                 $aEvent['content']['embed'] = bx_linkify_embeded($aEvent['content']['text']);
         }
 
-        if(empty($aEventAdd['menu_actions'])) {
+        if(empty($aEvent['menu_actions'])) {
             $oMenuActions = BxDolMenu::getObjectInstance($this->_oConfig->getObject('menu_item_actions_all'));
             if(!$oMenuActions)
                 $oMenuActions = BxDolMenu::getObjectInstance($this->_oConfig->getObject('menu_item_actions'));
         }
         else
-            $oMenuActions = $aEventAdd['menu_actions'];
+            $oMenuActions = $aEvent['menu_actions'];
 
-        if($oMenuActions !== false) {
-            $oMenuActions->setEvent($aEvent, $aParams);
+        $aEvent['menu_actions'] = $oMenuActions !== false && $oMenuActions->setEvent($aEvent, $aParams) ? $oMenuActions->getCodeAPI() : [];
 
-            $aEvent['menu_actions'] = $oMenuActions->getCodeAPI();
-        }
-
-        if(empty($aEventAdd['menu_manage']))
+        if(empty($aEvent['menu_manage']))
             $oMenuManage = BxDolMenu::getObjectInstance($this->_oConfig->getObject('menu_item_manage'));
         else
-            $oMenuManage = $aEventAdd['menu_manage'];
+            $oMenuManage = $aEvent['menu_manage'];
 
-        if($oMenuManage !== false) {
-            $oMenuManage->setEvent($aEvent);
-
-            $aEvent['menu_manage'] = $oMenuManage->getCodeAPI();
+        if(empty($aEvent['menu_counters'])) {
+            $oMenuCounters = BxDolMenu::getObjectInstance($this->_oConfig->getObject('menu_item_counters'));
         }
+        else
+            $oMenuCounters = $aEvent['menu_counters'];
 
-        if ($aParams['type'] != 'owner')
-            $aEvent['owners'] = $this->_getTmplVarsTimelineOwner($aEvent);
+        $aEvent['menu_counters'] = $oMenuCounters !== false && $oMenuCounters->setEvent($aEvent, $aParams) ? $oMenuCounters->getCodeAPI() : [];
         
-        $aCmts = [];
-        $oCmts = $oModule->getCmtsObject($aEvent['comments']['system'], $aEvent['comments']['object_id']);
-        if($oCmts !== false) {
-            if (getParam('bx_timeline_preload_comments') > 0){
-                $aCmtsParams = ['mode' => 'feed', 'order_way' => 'desc', 'start_from' => 0,'is_form' => false, 'per_view' => getParam('bx_timeline_preload_comments')];
-                $aCmts = bx_srv('system', 'get_comments_api', [$oCmts, $aCmtsParams], 'TemplCmtsServices');
-                $aCmts['data'] = array_reverse($aCmts['data']);
+        $aEvent['menu_manage'] = $oMenuManage !== false && $oMenuManage->setEvent($aEvent) ? $oMenuManage->getShortCodeAPI() : [];
+
+        if(!isset($aParams['type']) || $aParams['type'] != 'owner')
+            $aEvent['owners'] = $this->_getTmplVarsTimelineOwner($aEvent);
+
+        if(($oCmts = $oModule->getCmtsObject($aEvent['comments']['system'], $aEvent['comments']['object_id'])) !== false) {
+            $aEvent['cmts'] = [];
+            if(($iCmtsPreload = (int)getParam('bx_timeline_preload_comments')) > 0) {
+                $aCmts = bx_srv('system', 'get_comments_api', [$oCmts, [
+                    'mode' => 'feed', 
+                    'order_way' => 'desc', 
+                    'start_from' => 0,
+                    'per_view' => $iCmtsPreload,
+                    'is_form' => false, 
+                ]], 'TemplCmtsServices');
+
+                if(!empty($aCmts['data']) && is_array($aCmts['data'])) {
+                    $aCmts['data'] = array_reverse($aCmts['data']);
+
+                    $aEvent['cmts'] = $aCmts;
+                }
             }
 
-            $aEvent['cmts'] = $aCmts;
             $aEvent['cmts']['count'] = $aEvent['comments']['count'];
         }
 
-        return $aEvent;
+        $aEvent['content'] = array_intersect_key($aEvent['content'], array_flip([
+            'object_id', 'title', 'text', 'links', 'images', 'images_attach', 'videos', 'videos_attach', 'files', 'files_attach', 'parse_type', 'owner_name', 'embed'
+        ]));
+
+        return array_intersect_key($aEvent, array_flip([
+            'id', 'type', 'object_privacy_view', 'content', 'labels', 'date', 'menu_actions', 'menu_counters', 'menu_manage', 'author_data', 'author_actions', 'url', 'owners', 'cmts'
+        ]));
     }
 
     protected function _getContent($sType, $aEvent, $aBrowseParams = array())
@@ -2353,10 +2378,10 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                     'icon' => 'check'
                 );
             }
-            if(bx_is_api()) {
+
+            if($this->_bIsApi)
                 $aTmplVarsOwners[] = $oOwner->getUnitAPI(0, ['template' => 'unit_wo_info']);
-            }
-            else{
+            else
                 $aTmplVarsOwners[] =  array(
                     'style_prefix' => $sStylePrefix,
                     'owner_type' => _t('_' . $sToType),
@@ -2370,7 +2395,6 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                         )
                     )
                 );
-            }
         }
 
         if(empty($aTmplVarsOwners))
@@ -3113,7 +3137,7 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                 $mixedResult = $this->$sMethod($aEvent);
         }
 
-        if($mixedResult === false)
+        if(empty($mixedResult) || !is_array($mixedResult))
             return '';
 
         $this->_preparetDataActions(false, $aEvent, $mixedResult);
@@ -3197,7 +3221,7 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                 }
 
                 if(empty($aReposted) || !is_array($aReposted))
-                    return array();
+                    return [];
 
                 $aEventReposted['content'] = $aReposted['content'];
 

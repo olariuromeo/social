@@ -220,7 +220,7 @@ class BxBaseAccountForms extends BxDolProfileForms
 
         // login to the created account automatically
         if ($bNeedToLogin)
-            bx_login($iAccountId);
+            bx_login($iAccountId, bx_is_remember_me());
 
         return $iProfileId;
     }
@@ -254,8 +254,11 @@ class BxBaseAccountForms extends BxDolProfileForms
 
         // check and display form
         $oForm = $this->getObjectFormDelete();
-        if(bx_get('content') !== false)
+        if(bx_get('content') !== false) {
             $oForm->aInputs['delete_content']['value'] = (int)bx_get('content');
+            if(!$oForm->aInputs['delete_content']['value'])
+                $oForm->aInputs['delete_confirm']['caption'] = _t('_sys_form_account_input_delete_confirm_wo_content');
+        }
 
         if (!$oForm)
             return $bIsApi ? _t('_sys_txt_error_occured') : MsgBox(_t('_sys_txt_error_occured'));
@@ -264,18 +267,16 @@ class BxBaseAccountForms extends BxDolProfileForms
             unset($aAccountInfo['password']);
 
         $oForm->initChecker($aAccountInfo);
-
         if (!$oForm->isSubmittedAndValid())
             return $bIsApi ? $oForm->getCodeAPI() : $oForm->getCode();
 
         // delete account
-        $oAccount = BxDolAccount::getInstance($aAccountInfo['id']);
-        if (!$oAccount->delete(false === bx_get('delete_content') ? true : (int)$oForm->getCleanValue('delete_content') != 0))
+        if (($oAccount = BxDolAccount::getInstance($aAccountInfo['id'])) !== false && !$oAccount->delete(false === bx_get('delete_content') ? true : (int)$oForm->getCleanValue('delete_content') != 0, true))
             return $bIsApi ? _t('_sys_txt_error_account_delete') : MsgBox(_t('_sys_txt_error_account_delete'));
 
         // logout from deleted account
-        if($iAccountId == getLoggedId())
-        	bx_logout();
+        if ($iAccountId == getLoggedId())
+            bx_logout();
 
         // redirect to homepage
         $this->_redirectAndExit('', false);
@@ -328,7 +329,7 @@ class BxBaseAccountForms extends BxDolProfileForms
             // relogin with new password
             bx_alert('account', 'edited', $aAccountInfo['id'], $aAccountInfo['id'], array('action' => 'change_password'));
             bx_logout();
-            bx_login($aAccountInfo['id']);
+            bx_login($aAccountInfo['id'], bx_is_remember_me());
         }
 
         // check if other text info was changed - if auto-appproval is off

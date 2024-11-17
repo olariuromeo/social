@@ -8,12 +8,12 @@ DELETE FROM `sys_options_types` WHERE `id` = @iTypeId;
 
 -- PAGES
 DELETE FROM `sys_objects_page` WHERE `module` = 'bx_courses';
-DELETE FROM `sys_pages_blocks` WHERE `module` = 'bx_courses' OR `object` IN('bx_courses_create_profile', 'bx_courses_delete_profile', 'bx_courses_join_profile', 'bx_courses_edit_profile', 'bx_courses_edit_profile_cover', 'bx_courses_invite', 'bx_courses_view_profile', 'bx_courses_view_profile_closed', 'bx_courses_profile_info', 'bx_courses_profile_pricing', 'bx_courses_profile_comments', 'bx_courses_home', 'bx_courses_fans', 'bx_courses_joined', 'bx_courses_favorites', 'bx_courses_top', 'bx_courses_search', 'bx_courses_manage', 'bx_courses_administration');
+DELETE FROM `sys_pages_blocks` WHERE `module` = 'bx_courses' OR `object` IN('bx_courses_create_profile', 'bx_courses_delete_profile', 'bx_courses_join_profile', 'bx_courses_edit_profile', 'bx_courses_edit_profile_cover', 'bx_courses_invite', 'bx_courses_view_profile', 'bx_courses_view_profile_closed', 'bx_courses_view_profile_node', 'bx_courses_profile_info', 'bx_courses_profile_pricing', 'bx_courses_profile_comments', 'bx_courses_home', 'bx_courses_fans', 'bx_courses_joined', 'bx_courses_favorites', 'bx_courses_top', 'bx_courses_search', 'bx_courses_manage', 'bx_courses_administration');
 
 -- MENU
 DELETE FROM `sys_objects_menu` WHERE `module` = 'bx_courses';
 DELETE FROM `sys_menu_sets` WHERE `module` = 'bx_courses';
-DELETE FROM `sys_menu_items` WHERE `module` = 'bx_courses' OR `set_name` IN('bx_courses_view_submenu', 'bx_courses_submenu', 'bx_courses_view_actions', 'bx_courses_view_actions_more', 'bx_courses_view_actions_all', 'bx_courses_view_meta', 'bx_courses_my', 'bx_courses_snippet_meta', 'bx_courses_menu_manage_tools');
+DELETE FROM `sys_menu_items` WHERE `module` = 'bx_courses' OR `set_name` IN('bx_courses_view_submenu', 'bx_courses_submenu', 'bx_courses_view_actions', 'bx_courses_view_actions_more', 'bx_courses_view_actions_all', 'bx_courses_view_meta', 'bx_courses_content_add', 'bx_courses_my', 'bx_courses_snippet_meta', 'bx_courses_menu_manage_tools');
 
 -- ACL
 DELETE `sys_acl_actions`, `sys_acl_matrix` FROM `sys_acl_actions`, `sys_acl_matrix` WHERE `sys_acl_matrix`.`IDAction` = `sys_acl_actions`.`ID` AND `sys_acl_actions`.`Module` = 'bx_courses';
@@ -38,9 +38,9 @@ DELETE FROM `sys_statistics` WHERE `name` LIKE 'bx_courses%';
 DELETE FROM `sys_objects_chart` WHERE `object` LIKE 'bx_courses%';
 
 -- GRIDS
-DELETE FROM `sys_objects_grid` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view');
-DELETE FROM `sys_grid_fields` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view');
-DELETE FROM `sys_grid_actions` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view');
+DELETE FROM `sys_objects_grid` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view', 'bx_courses_cnt_structure_manage', 'bx_courses_cnt_data_manage');
+DELETE FROM `sys_grid_fields` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view', 'bx_courses_cnt_structure_manage', 'bx_courses_cnt_data_manage');
+DELETE FROM `sys_grid_actions` WHERE `object` IN ('bx_courses_administration', 'bx_courses_moderation', 'bx_courses_common', 'bx_courses_fans', 'bx_courses_invites', 'bx_courses_prices_manage', 'bx_courses_prices_view', 'bx_courses_cnt_structure_manage', 'bx_courses_cnt_data_manage');
 
 -- ALERTS
 SET @iHandler := (SELECT `id` FROM `sys_alerts_handlers` WHERE `name` = 'bx_courses' LIMIT 1);

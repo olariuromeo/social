@@ -262,40 +262,39 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
         // get form object
         $oForm = $this->getObjectFormAdd($sDisplay);
         if (!$oForm)
-            return bx_is_api() ? [bx_api_get_msg('_sys_txt_error_occured')] : $this->prepareResponse(MsgBox(_t('_sys_txt_error_occured')), $bAsJson, 'msg');
+            return ($sMsg = '_sys_txt_error_occured') && $this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : $this->prepareResponse(MsgBox(_t($sMsg)), $bAsJson, 'msg');
 
         $bAsJson = $this->_bAjaxMode && $oForm->isSubmitted();
         // check access
         if (CHECK_ACTION_RESULT_ALLOWED !== ($sMsg = $this->_oModule->$sCheckFunction())) {
-            $oProfile = BxDolProfile::getInstance();
-            if ($oProfile && ($aProfileInfo = $oProfile->getInfo()) && $aProfileInfo['type'] == 'system' && is_subclass_of($this->_oModule, 'BxBaseModProfileModule') && $this->_oModule->serviceActAsProfile()) // special check for system profile is needed, because of incorrect error message
-                return bx_is_api() ? [bx_api_get_msg('_sys_txt_access_denied')] : $this->prepareResponse(MsgBox(_t('_sys_txt_access_denied')), $bAsJson, 'msg');
+            if (($oProfile = BxDolProfile::getInstance()) !== false && ($aProfileInfo = $oProfile->getInfo()) && $aProfileInfo['type'] == 'system' && is_subclass_of($this->_oModule, 'BxBaseModProfileModule') && $this->_oModule->serviceActAsProfile()) // special check for system profile is needed, because of incorrect error message
+                return ($sMsg = '_sys_txt_access_denied') && $this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : $this->prepareResponse(MsgBox(_t($sMsg)), $bAsJson, 'msg');
             else
-                return bx_is_api() ? [bx_api_get_msg($sMsg)] : $this->prepareResponse(MsgBox($sMsg), $bAsJson, 'msg');
+                return $this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : $this->prepareResponse(MsgBox($sMsg), $bAsJson, 'msg');
         }
 
         // check and display form
         $oForm->initChecker();
         if (!$oForm->isSubmittedAndValid())
-            return bx_is_api() ? [bx_api_get_block('form', $oForm->getCodeAPI(), ['ext' => ['name' => $this->_oModule->getName(), 'request' => ['url' => '/api.php?r=' . $this->_oModule->getName() . '/entity_create', 'immutable' => true]]])] : $this->prepareResponse($oForm->getCode($this->_bDynamicMode), $bAsJson, 'form', array(
+            return $this->_bIsApi ? $this->prepareResponseAPI('form', $oForm->getCodeAPI(), ['request_uri' => 'entity_create']) : $this->prepareResponse($oForm->getCode($this->_bDynamicMode), $bAsJson, 'form', [
             	'form_id' => $oForm->getId()
-            ));
+            ]);
 
         // insert data into database
         $aValsToAdd = array ();
         $iContentId = $oForm->insert ($aValsToAdd);
         if (!$iContentId) {
             if (!$oForm->isValid())
-                return bx_is_api() ? [bx_api_get_block('form', $oForm->getCodeAPI(), ['ext' => ['name' => $this->_oModule->getName(), 'request' => ['url' => '/api.php?r=' . $this->_oModule->getName() . '/entity_create', 'immutable' => true]]])] : $this->prepareResponse($oForm->getCode($this->_bDynamicMode), $bAsJson, 'form', array(
+                return $this->_bIsApi ? $this->prepareResponseAPI('form', $oForm->getCodeAPI(), ['request_uri' => 'entity_create']) : $this->prepareResponse($oForm->getCode($this->_bDynamicMode), $bAsJson, 'form', [
                     'form_id' => $oForm->getId()
-                ));
+                ]);
             else
-                return bx_is_api() ? [bx_api_get_msg('_sys_txt_error_entry_creation')] : $this->prepareResponse(MsgBox(_t('_sys_txt_error_entry_creation')), $bAsJson, 'msg');
+                return ($sMsg = '_sys_txt_error_entry_creation') && $this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : $this->prepareResponse(MsgBox(_t($sMsg)), $bAsJson, 'msg');
         }
 
         $sResult = $this->onDataAddAfter (getLoggedId(), $iContentId);
         if ($sResult)
-            return $this->prepareResponse($sResult, $bAsJson, 'msg');
+            return $this->_bIsApi ? $this->prepareResponseAPI('msg', $sResult) : $this->prepareResponse($sResult, $bAsJson, 'msg');
 
         list($oProfile, $aContentInfo) = $this->_getProfileAndContentData($iContentId);
 
@@ -313,22 +312,23 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
         // Create alert about the completed action.
         $this->_oModule->alertAfterAdd($aContentInfo);
 
-        
-
         // Redirect
-        if (bx_is_api())
+        if ($this->_bIsApi)
             return $this->redirectAfterAdd($aContentInfo);
         else
             $this->redirectAfterAdd($aContentInfo);
     }
-
+            
     public function redirectAfterAdd($aContentInfo, $sUrl = '')
     {
     	$CNF = &$this->_oModule->_oConfig->CNF;
 
         if ($sUrl == '')
             $sUrl = 'page.php?i=' . $CNF['URI_VIEW_ENTRY'] . '&id=' . $aContentInfo[$CNF['FIELD_ID']];
-        
+
+        if(($mixedUrl = $this->_getRedirectFromContext('add', $aContentInfo)) !== false)
+              $sUrl = $mixedUrl;
+
         /**
          * @hooks
          * @hookdef hook-bx_base_general-redirect_after_add '{module_name}', 'redirect_after_add' - hook to override redirect URL which is used after content creation
@@ -348,8 +348,8 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
             'override_result' => &$sUrl,
         ]);
 
-        if (bx_is_api())
-            return [bx_api_get_block('redirect', ['uri' => BxDolPermalinks::getInstance()->permalink($sUrl), 'timeout' => 1000])];
+        if($this->_bIsApi)
+            return !empty($sUrl) ? [bx_api_get_block('redirect', ['uri' => BxDolPermalinks::getInstance()->permalink($sUrl), 'timeout' => 1000])] : [];
         
         if($this->_bAjaxMode) {
             echoJson($this->prepareResponse($sUrl, $this->_bAjaxMode, 'redirect'));
@@ -369,16 +369,16 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
         // get content data and profile info
         list ($oProfile, $aContentInfo) = $this->_getProfileAndContentData($iContentId);
         if (!$aContentInfo)
-            return $bErrorMsg && ($sMsg = '_sys_txt_error_entry_is_not_defined') ? ($this->_bIsApi ? bx_api_get_msg($sMsg) : MsgBox(_t($sMsg))) : '';
+            return $bErrorMsg && ($sMsg = '_sys_txt_error_entry_is_not_defined') ? ($this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : MsgBox(_t($sMsg))) : '';
 
         // check access
         if (CHECK_ACTION_RESULT_ALLOWED !== ($sMsg = $this->_oModule->$sCheckFunction($aContentInfo)))
-            return $bErrorMsg ? ($this->_bIsApi ? bx_api_get_msg($sMsg) : MsgBox($sMsg)) : '';
+            return $bErrorMsg ? ($this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : MsgBox($sMsg)) : '';
 
         // check and display form
         $oForm = $this->getObjectFormEdit($sDisplay);
         if (!$oForm)
-            return $bErrorMsg && ($sMsg = '_sys_txt_error_occured') ? ($this->_bIsApi ? bx_api_get_msg($sMsg) : MsgBox(_t($sMsg))) : '';
+            return $bErrorMsg && ($sMsg = '_sys_txt_error_occured') ? ($this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : MsgBox(_t($sMsg))) : '';
 
         $aSpecificValues = array();        
         if (!empty($CNF['OBJECT_METATAGS'])) {
@@ -389,7 +389,7 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
 
         $oForm->initChecker($aContentInfo, $aSpecificValues);
         if (!$oForm->isSubmittedAndValid())
-            return $this->_bIsApi ? $oForm : $oForm->getCode();
+            return $this->_bIsApi ? $this->prepareResponseAPI('form', $oForm->getCodeAPI(), ['request_uri' => 'entity_edit', 'request_params' => ['params' => [$iContentId, $oForm->aParams['display']]]]) : $oForm->getCode();
 
         // update data in the DB
         $aTrackTextFieldsChanges = null;
@@ -398,15 +398,15 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
 
         if (!$oForm->update ($aContentInfo[$CNF['FIELD_ID']], array(), $aTrackTextFieldsChanges)) {
             if (!$oForm->isValid())
-                return $this->_bIsApi ? $oForm : $oForm->getCode();
+                return $this->_bIsApi ? $this->prepareResponseAPI('form', $oForm->getCodeAPI(), ['request_uri' => 'entity_edit', 'request_params' => ['params' => [$iContentId, $oForm->aParams['display']]]]) : $oForm->getCode();
             else
-                return ($sMsg = '_sys_txt_error_entry_update') && $this->_bIsApi ? bx_api_get_msg($sMsg) : MsgBox(_t($sMsg));
+                return ($sMsg = '_sys_txt_error_entry_update') && $this->_bIsApi ? $this->prepareResponseAPI('msg', $sMsg) : MsgBox(_t($sMsg));
         }
 
         list ($oProfile, $aContentInfo) = $this->_getProfileAndContentData($iContentId);
         $sResult = $this->onDataEditAfter ($aContentInfo[$CNF['FIELD_ID']], $aContentInfo, $aTrackTextFieldsChanges, $oProfile, $oForm);
         if ($sResult)
-            return $this->_bIsApi ? bx_api_get_msg($sResult) : $sResult;
+            return $this->_bIsApi ? $this->prepareResponseAPI('msg', $sResult) : $sResult;
 
         /*
          * Process metas.
@@ -421,9 +421,9 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
 
         // Create alert about the completed action.
         $this->_oModule->alertAfterEdit($aContentInfo);
-        
+
         // Redirect
-        if (bx_is_api())
+        if ($this->_bIsApi)
             return $this->redirectAfterEdit($aContentInfo);
         else
             $this->redirectAfterEdit($aContentInfo);
@@ -435,6 +435,9 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
 
         if ($sUrl == '')
             $sUrl = 'page.php?i=' . $CNF['URI_VIEW_ENTRY'] . '&id=' . $aContentInfo[$CNF['FIELD_ID']];
+
+        if(($mixedUrl = $this->_getRedirectFromContext('edit', $aContentInfo)) !== false)
+            $sUrl = $mixedUrl;
 
         /**
          * @hooks
@@ -448,9 +451,9 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
             'override_result' => &$sUrl,
         ]);
 
-        if (bx_is_api())
-            return bx_api_get_block('redirect', ['uri' => '/' . BxDolPermalinks::getInstance()->permalink($sUrl), 'timeout' => 1000]);
-        
+        if($this->_bIsApi)
+            return !empty($sUrl) ? bx_api_get_block('redirect', ['uri' => '/' . BxDolPermalinks::getInstance()->permalink($sUrl), 'timeout' => 1000]) : [];
+
         $this->_redirectAndExit($sUrl);
     }
 
@@ -626,6 +629,17 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
         if(($oPrivacy = BxDolPrivacy::getObjectInstance($CNF['OBJECT_PRIVACY_VIEW'])) !== false)
             $oPrivacy->deleteGroupCustomByContentId($iContentId);
 
+        $sKey = 'FIELD_ALLOW_VIEW_TO';
+        if(isset($CNF[$sKey], $aContentInfo[$CNF[$sKey]]) && ($iContextPid = (int)$aContentInfo[$CNF[$sKey]]) < 0) {
+            $iContextPid = abs($iContextPid);
+            if(($oContext = BxDolProfile::getInstance($iContextPid)) !== false) {
+                $sModule = $oContext->getModule();
+                $sMethod = 'on_content_deleted';
+                if(bx_is_srv($sModule, $sMethod))
+                    bx_srv($sModule, $sMethod, [$this->_oModule->getName(), $iContentId, $oContext->getContentId()]);
+            }
+        }
+
         bx_audit(
             $iContentId, 
             $this->_oModule->getName(), 
@@ -735,6 +749,33 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
         return $aResponse;
     }
     
+    protected function prepareResponseAPI($sType, $mixedData, $aParams = [])
+    {
+        $aResult = [];
+        switch($sType) {
+            case 'msg':
+                $aResult = bx_api_get_msg($mixedData);
+                break;
+
+            case 'form':
+                $sModule = $this->_oModule->getName();
+                $sRequestUrl = '/api.php?r=' . $sModule . '/' . $aParams['request_uri'];
+                if(!empty($aParams['request_params']) && is_array($aParams['request_params']))
+                    $sRequestUrl = bx_append_url_params($sRequestUrl, $aParams['request_params']);
+
+                bx_append_url_params($sUrl, $mixedParams);
+                $aResult = bx_api_get_block('form', $mixedData, [
+                    'ext' => [
+                        'name' => $sModule, 
+                        'request' => ['url' => $sRequestUrl, 'immutable' => true]
+                    ]
+                ]);
+                break;
+        }
+        
+        return [$aResult];
+    }
+
     protected function _setAbsoluteActionUrl($sType, &$oForm)
     {
         $CNF = &$this->_oModule->_oConfig->CNF;
@@ -744,6 +785,27 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
             return;
 
         $oForm->setAbsoluteActionUrl(bx_absolute_url(BxDolPermalinks::getInstance()->permalink('page.php?i=' . $CNF[$sKeyUri])));
+    }
+
+    protected function _getRedirectFromContext($sAction, $aContentInfo)
+    {
+        $CNF = &$this->_oModule->_oConfig->CNF;
+
+        $sKey = 'FIELD_ALLOW_VIEW_TO';
+        if(empty($CNF[$sKey]) || !isset($aContentInfo[$CNF[$sKey]]) || (int)$aContentInfo[$CNF[$sKey]] >= 0) 
+            return false;
+
+        $iContextPid = abs($aContentInfo[$CNF[$sKey]]);
+        $oContext = BxDolProfile::getInstance($iContextPid);
+        if(!$oContext)
+            return false;
+
+        $sModuleContext = $oContext->getModule();
+        $sMethodContext = 'on_content_' . $sAction . 'ed_redirect';
+        if(!bx_is_srv($sModuleContext, $sMethodContext))
+            return false;
+
+        return bx_srv($sModuleContext, $sMethodContext, [$this->_oModule->getName(), $aContentInfo[$CNF['FIELD_ID']]]);
     }
 }
 

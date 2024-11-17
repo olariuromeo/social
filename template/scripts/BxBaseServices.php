@@ -90,6 +90,7 @@ class BxBaseServices extends BxDol implements iBxDolProfileService
             'BrowseMembers' => 'BxBaseServiceProfiles',
             'UpdateSettings' => 'BxBaseServiceProfiles',
             'Befriend' => 'BxBaseServiceProfiles',
+            'ProfileCounters' => 'BxBaseServiceProfiles',
             
             'GetChartGrowth' => 'BxBaseChartServices',
             'GetChartStats' => 'BxBaseChartServices',
@@ -794,6 +795,15 @@ class BxBaseServices extends BxDol implements iBxDolProfileService
         ]]);
     }
 
+    public function serviceGetBlockAskAssistant($aParams = [])
+    {
+        $iAssistant = BxDolAI::getAssistantForAskBlock();
+        if(!$iAssistant)
+            return '';
+
+        return BxDolAIAssistant::getObjectInstance($iAssistant)->getAskBlock($aParams);
+    }
+
     public function serviceGetMenu($aParams)
     {
         $bIsApi = bx_is_api();
@@ -1349,6 +1359,11 @@ class BxBaseServices extends BxDol implements iBxDolProfileService
     }
 
     public function serviceGetOptionsLiveSearchAssistant()
+    {
+        return ['' => _t('_Select_one')] + BxDolAI::getInstance()->getAssistants(['active' => true, 'hidden' => false]);
+    }
+
+    public function serviceGetOptionsAskBlockAssistant()
     {
         return ['' => _t('_Select_one')] + BxDolAI::getInstance()->getAssistants(['active' => true, 'hidden' => false]);
     }

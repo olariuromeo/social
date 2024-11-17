@@ -676,6 +676,14 @@ class BxDolDb extends BxDolFactory implements iBxDolSingleton
             $sOutput .= '</div>';
         } 
 
+        if (self::$_rLink) { // connection errors aren't logged since bx_log required DB connection
+            bx_log('sys_db', "$sErrorType\n" . 
+                (empty($aError['message']) ? '' : "  Error: {$aError['message']}\n") . 
+                (empty($aError['query']) ? '' : "  Query: {$aError['query']}\n") . 
+                (!function_exists('getLoggedId') || !getLoggedId() ? '' : "  Account ID: " . getLoggedId() . "\n")
+            );
+        }
+
         if(defined('BX_DB_DO_EMAIL_ERROR_REPORT') && BX_DB_DO_EMAIL_ERROR_REPORT) {
             $sSiteTitle = $this->getParam('site_title');
 
@@ -685,12 +693,6 @@ class BxDolDb extends BxDolFactory implements iBxDolSingleton
 
             sendMail($this->getParam('site_email'), "Database error in " . $sSiteTitle, $sMailBody, 0, array(), BX_EMAIL_SYSTEM, 'html', true);
         }
-
-        bx_log('sys_db', "$sErrorType\n" . 
-            (empty($aError['message']) ? '' : "  Error: {$aError['message']}\n") . 
-            (empty($aError['query']) ? '' : "  Query: {$aError['query']}\n") . 
-            (!function_exists('getLoggedId') || !getLoggedId() ? '' : "  Account ID: " . getLoggedId() . "\n")
-        );
 
         bx_show_service_unavailable_error_and_exit($sOutput);
     }

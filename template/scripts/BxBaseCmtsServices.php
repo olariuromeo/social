@@ -29,7 +29,39 @@ class BxBaseCmtsServices extends BxDol
 
         return $oCmts->serviceGetAuthor((int)$aCmt['cmt_id']);
     }
-    
+
+    public function serviceGetBlockContent($sSystem = '', $iObjectId = 0, $iCommentId = 0)
+    {
+        $bIsApi = bx_is_api();
+
+        if(empty($sSystem) && ($sSystem = bx_get('sys')) !== false)
+            $sSystem = bx_process_input($sSystem);
+
+        if(empty($iObjectId) && ($iObjectId = bx_get('id')) !== false)
+            $iObjectId = bx_process_input($iObjectId, BX_DATA_INT);
+
+        if(empty($iCommentId) && ($iCommentId = bx_get('cmt_id')) !== false)
+            $iCommentId = bx_process_input($iCommentId, BX_DATA_INT);
+
+        $oCmts = BxDolCmts::getObjectInstance($sSystem, $iObjectId, true);
+        if(!$oCmts || !$oCmts->isEnabled())
+            return $bIsApi ? [] : '';
+
+        if($bIsApi) {
+            $aSystem = $oCmts->getSystemInfo();
+
+            return [bx_api_get_block('comment_content', [
+                'author' => $oCmts->getObjectAuthorId(),
+                'module' => $aSystem['module'],
+                'title' => bx_is_srv($aSystem['module'], 'get_title') ?  bx_srv($aSystem['module'], 'get_title', [$iObjectId]) : '',
+                'text' => bx_is_srv($aSystem['module'], 'get_text') ?  bx_srv($aSystem['module'], 'get_text', [$iObjectId]) : '',
+                'link' => bx_api_get_relative_url($oCmts->getBaseUrl())
+            ])];
+        }
+
+        return '';
+    }
+
     public function serviceGetBlockAuthor($sSystem = '', $iObjectId = 0, $iCommentId = 0)
     {
         if(empty($sSystem) && ($sSystem = bx_get('sys')) !== false)
@@ -602,8 +634,8 @@ class BxBaseCmtsServices extends BxDol
                 $bIsList = true;
                 $aForm['inputs']['cmt_parent_id']['value'] = 0;
             }
-            
-            $aRv['form'] = ['id' => 'cmt_form', 'type' => 'form', 'name' => 'comment', 'data' => $aForm, 'request' => ['immutable' => true]];
+            if (bx_get_logged_profile_id())           
+                $aRv['form'] = ['id' => 'cmt_form', 'type' => 'form', 'name' => 'comment', 'data' => $aForm, 'request' => ['immutable' => true]];
 
             // default view (form + list)
             if (!$oForm['form']->isSubmitted()){
@@ -637,10 +669,12 @@ class BxBaseCmtsServices extends BxDol
         $aBp['type'] = 'head';
         $oCmts->getParams($aBp, $aDp);
         $oCmts->prepareParams($aBp, $aDp);
-        
-        $aBp['order']['way'] = $aParams['order_way'];
-        $aBp['order_way'] = $aParams['order_way'];
-        $aBp['start'] = $aParams['start_from'] ; 
+
+        $sOrderWay = !empty($aParams['order_way']) ? $aParams['order_way'] : 'desc';
+
+        $aBp['order']['way'] = $sOrderWay;
+        $aBp['order_way'] = $sOrderWay;
+        $aBp['start'] = !empty($aParams['start_from']) ? (int)$aParams['start_from'] : 0; 
         $aPp = $aBp['per_view'];
         $aBp['per_view'] =  $aBp['per_view'] + 1; 
         if (isset($aParams['per_view'])){
@@ -656,22 +690,23 @@ class BxBaseCmtsServices extends BxDol
             $aCmts = array_slice($aCmts, 0, $aBp['per_view']); 
             $aParams['start_from'] = $aBp['start'] + $aBp['per_view'];
         }
+
         $aCmtsRv = [];
         foreach ($aCmts as $aCmt) {
             $aBp['order_way'] = 'asc';
-            $oCmt = $oCmts->getCommentStructure($aCmt['cmt_id'], $aBp, $aDp);
-            if($oCmt === false)
+            $aCmts = $oCmts->getCommentStructure($aCmt['cmt_id'], $aBp, $aDp);
+            if($aCmts === false)
                 continue;
 
-            if(($sKey = array_shift(array_keys($oCmt))) && $oCmt[$sKey]['data']['cmt_parent_id'] > 0){
-                $aParent = $oCmts->getCommentSimple((int)$oCmt[$sKey]['data']['cmt_parent_id']);
-                $oCmt[$sKey]['data']['cmt_parent'] = [
+            if(($aKeys = array_keys($aCmts)) && ($sKey = array_shift($aKeys)) && $aCmts[$sKey]['data']['cmt_parent_id'] > 0) {
+                $aParent = $oCmts->getCommentSimple((int)$aCmts[$sKey]['data']['cmt_parent_id']);
+                $aCmts[$sKey]['data']['cmt_parent'] = [
                     'data' => $aParent,
                     'author_data' => BxDolProfile::getData($aParent['cmt_author_id'])
                 ];
             }
 
-            $aCmtsRv[] = $oCmt;
+            $aCmtsRv[] = $aCmts;
         }
         
         $aData = [
@@ -680,7 +715,7 @@ class BxBaseCmtsServices extends BxDol
             'count' => count($aCmts),
             'per_view' => $aBp['per_view'],
             'total_count' => $oCmts->getCommentsCount(),
-            'order' => $aParams['order_way'],
+            'order' => $sOrderWay,
             'view' => $aDp['type'],
             'module' => $oCmts->getSystemName(), 
             'object_id' => $oCmts->getId(),
@@ -694,7 +729,7 @@ class BxBaseCmtsServices extends BxDol
         $aRv = [
             'id' => 'cmt_list', 
             'type' => 'browse', 
-            'insert' => $aParams['insert'], 
+            'insert' => !empty($aParams['insert']) ? $aParams['insert'] : 'before', 
             'data' => $aData
         ];
         
