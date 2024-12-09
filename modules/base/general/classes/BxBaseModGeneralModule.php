@@ -2602,6 +2602,56 @@ class BxBaseModGeneralModule extends BxDolModule
     }
 
     /**
+     * Data for Reputation module
+     */
+    public function serviceGetReputationData()
+    {
+    	$sModule = $this->_aModule['name'];
+
+        $aResult = [
+            'handlers' => [
+                ['group' => $sModule . '_object', 'type' => 'insert', 'alert_unit' => $sModule, 'alert_action' => 'added', 'points_active' => 3, 'points_passive' => 0],
+                ['group' => $sModule . '_object', 'type' => 'delete', 'alert_unit' => $sModule, 'alert_action' => 'deleted', 'points_active' => -3, 'points_passive' => 0],
+
+                ['group' => $sModule . '_comment', 'type' => 'insert', 'alert_unit' => $sModule, 'alert_action' => 'commentPost', 'points_active' => 2, 'points_passive' => 1],
+                ['group' => $sModule . '_comment', 'type' => 'delete', 'alert_unit' => $sModule, 'alert_action' => 'commentRemoved', 'points_active' => -2, 'points_passive' => -1],
+
+                ['group' => $sModule . '_vote', 'type' => 'insert', 'alert_unit' => $sModule, 'alert_action' => 'doVote', 'points_active' => 1, 'points_passive' => 1],
+                ['group' => $sModule . '_vote', 'type' => 'delete', 'alert_unit' => $sModule, 'alert_action' => 'undoVote', 'points_active' => -1, 'points_passive' => -1],
+
+                ['group' => $sModule . '_reaction', 'type' => 'insert', 'alert_unit' => $sModule . '_reactions', 'alert_action' => 'doVote', 'points_active' => 1, 'points_passive' => 1],
+                ['group' => $sModule . '_reaction', 'type' => 'delete', 'alert_unit' => $sModule . '_reactions', 'alert_action' => 'undoVote', 'points_active' => -1, 'points_passive' => -1],
+
+                ['group' => $sModule . '_score_up', 'type' => 'insert', 'alert_unit' => $sModule, 'alert_action' => 'doVoteUp', 'points_active' => 1, 'points_passive' => 1],
+                ['group' => $sModule . '_score_up', 'type' => 'delete', 'alert_unit' => $sModule, 'alert_action' => 'undoVoteUp', 'points_active' => -1, 'points_passive' => -1],
+
+                ['group' => $sModule . '_score_down', 'type' => 'insert', 'alert_unit' => $sModule, 'alert_action' => 'doVoteDown', 'points_active' => 1, 'points_passive' => -1],
+                ['group' => $sModule . '_score_down', 'type' => 'delete', 'alert_unit' => $sModule, 'alert_action' => 'undoVoteDown', 'points_active' => -1, 'points_passive' => 1],
+            ],
+            'alerts' => [
+                ['unit' => $sModule, 'action' => 'added'],
+                ['unit' => $sModule, 'action' => 'deleted'],
+
+                ['unit' => $sModule, 'action' => 'commentPost'],
+                ['unit' => $sModule, 'action' => 'commentRemoved'],
+
+                ['unit' => $sModule, 'action' => 'doVote'],
+                ['unit' => $sModule, 'action' => 'undoVote'],
+
+                ['unit' => $sModule . '_reactions', 'action' => 'doVote'],
+                ['unit' => $sModule . '_reactions', 'action' => 'undoVote'],
+
+                ['unit' => $sModule, 'action' => 'doVoteUp'],
+                ['unit' => $sModule, 'action' => 'undoVoteUp'],
+                ['unit' => $sModule, 'action' => 'doVoteDown'],
+                ['unit' => $sModule, 'action' => 'undoVoteDown'],
+            ]
+        ];
+
+        return $aResult;
+    }
+
+    /**
      * Data for Timeline module
      */
     public function serviceGetTimelineData()
@@ -2636,15 +2686,21 @@ class BxBaseModGeneralModule extends BxDolModule
         if((!empty($CNF['FIELD_STATUS']) && $aContentInfo[$CNF['FIELD_STATUS']] != 'active') || (!empty($CNF['FIELD_STATUS_ADMIN']) && $aContentInfo[$CNF['FIELD_STATUS_ADMIN']] != 'active'))
             return false;
 
+        $bCache = true;
         $iUserId = $this->getUserId();
         $iAuthorId = (int)$aContentInfo[$CNF['FIELD_AUTHOR']];
         $iAuthorIdAbs = abs($iAuthorId);
 
         /**
-         * Don't show anonymous posts on the post's owner timeline.
+         * Don't show anonymous posts on the post's owner timeline
+         * and don't cache them when they're viewed by their authors. 
          */
-        if($iAuthorId < 0 && $iAuthorIdAbs != $iUserId && ((is_numeric($aEvent['owner_id']) && $iAuthorIdAbs == (int)$aEvent['owner_id']) || (is_array($aEvent['owner_id']) && in_array($iAuthorIdAbs, $aEvent['owner_id']))))
-            return false;
+        if($iAuthorId < 0 && ((is_numeric($aEvent['owner_id']) && $iAuthorIdAbs == (int)$aEvent['owner_id']) || (is_array($aEvent['owner_id']) && in_array($iAuthorIdAbs, $aEvent['owner_id'])))) {
+            if($iAuthorIdAbs != $iUserId)
+                return false;
+
+            $bCache = false;
+        }
 
         //--- Views
         $oViews = isset($CNF['OBJECT_VIEWS']) ? BxDolView::getObjectInstance($CNF['OBJECT_VIEWS'], $aContentInfo[$CNF['FIELD_ID']]) : null;
@@ -2721,15 +2777,15 @@ class BxBaseModGeneralModule extends BxDolModule
         if(isset($aEvent['object_privacy_view']) && (int)$aEvent['object_privacy_view'] < 0)
             $iOwnerId = abs($aEvent['object_privacy_view']);
 
-        $bCache = true;
         $aContent = $this->_getContentForTimelinePost($aEvent, $aContentInfo, $aBrowseParams);
         if(isset($aContent['_cache'])) {
-            $bCache = (bool)$aContent['_cache'];
+            if($bCache)
+                $bCache = (bool)$aContent['_cache'];
 
             unset($aContent['_cache']);
         }
 
-        return array(
+        return [
             '_cache' => $bCache,
             'owner_id' => $iOwnerId,
             'object_owner_id' => $iAuthorId,
@@ -2748,7 +2804,7 @@ class BxBaseModGeneralModule extends BxDolModule
             'comments' => $aComments,
             'title' => $sTitle, //may be empty.
             'description' => '' //may be empty.
-        );
+        ];
     }
 
     public function serviceGetTimelinePostAllowedView($aEvent)
@@ -4223,14 +4279,9 @@ class BxBaseModGeneralModule extends BxDolModule
             if ($oCategory)
                 $sCategory = $oCategory->getCategoryTitle($aContentInfo[$CNF['FIELD_CATEGORY']]);
         } 
-        
-    	return array(
-            'sample' => isset($CNF['T']['txt_sample_single_with_article']) ? $CNF['T']['txt_sample_single_with_article'] : $CNF['T']['txt_sample_single'],
-            'sample_wo_article' => $CNF['T']['txt_sample_single'],
-            'sample_action' => isset($CNF['T']['txt_sample_action']) ? $CNF['T']['txt_sample_action'] : '',
-            'url' => $sUrl,
+
+        $aResult = [
             'title' => $sTitle,
-            'category' => $sCategory,
             'text' => $sText,
             'images' => $aImages,
             'images_attach' => $aImagesAttach,
@@ -4238,7 +4289,15 @@ class BxBaseModGeneralModule extends BxDolModule
             'videos_attach' => $aVideosAttach,
             'files' => $aFiles,
             'files_attach' => $aFilesAttach
-        );
+        ];
+
+        return $this->_bIsApi ? $aResult : array_merge($aResult, [
+            'sample' => isset($CNF['T']['txt_sample_single_with_article']) ? $CNF['T']['txt_sample_single_with_article'] : $CNF['T']['txt_sample_single'],
+            'sample_wo_article' => $CNF['T']['txt_sample_single'],
+            'sample_action' => isset($CNF['T']['txt_sample_action']) ? $CNF['T']['txt_sample_action'] : '',
+            'url' => $sUrl,
+            'category' => $sCategory,
+        ]);
     }
 
     protected function _getImagesForTimelinePost($aEvent, $aContentInfo, $sUrl, $aBrowseParams = array())

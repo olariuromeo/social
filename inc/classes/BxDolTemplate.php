@@ -1481,6 +1481,19 @@ class BxDolTemplate extends BxDolFactory implements iBxDolSingleton
         return $this->_getAbsoluteLocation('path', $this->_sFolderIcons, $sName, $sCheckIn);
     }
 
+    function getIconContent($sName)
+    {
+        if(strpos($sName, '.svg') === false)
+            return false;
+
+        $mixedResult = false;
+        if(($sIconPath = $this->getIconPath($sName)))
+            $mixedResult = file_get_contents($sIconPath);
+        else
+            $mixedResult = bx_file_get_contents($sName);
+
+        return $mixedResult;
+    }
     /**
      * Get image/icon by name automatically. Cache item description:
      * [
@@ -3239,6 +3252,7 @@ class BxDolTemplate extends BxDolFactory implements iBxDolSingleton
             "'<bx_image_auto:([^\s]+) \/>'s" => "get_image_auto",
             "'<bx_image_url:([^\s]+) \/>'s" => "get_image_url",
             "'<bx_icon_url:([^\s]+) \/>'s" => "get_icon_url",
+            "'<bx_icon_inline:([^\s]+) \/>'s" => "get_icon_inline",
             "'<bx_text:([_\{\}\w\d\s]+[^\s]{1}) \/>'s" => "get_text",
             "'<bx_text_js:([^\s]+) \/>'s" => "get_text_js",
             "'<bx_text_attribute:([^\s]+) \/>'s" => "get_text_attribute",
@@ -3258,6 +3272,10 @@ class BxDolTemplate extends BxDolFactory implements iBxDolSingleton
                     break;
                 case 'get_icon_url':
                     $sResult = $oTemplate->getIconUrl($aMatches[1]);
+                    break;
+                case 'get_icon_inline':
+                    if(($sResult = $this->getIconContent($aMatches[1])) === false)
+                        $sResult = '';
                     break;
                 case 'get_text':
                     $sResult = _t($aMatches[1]);
@@ -3308,6 +3326,7 @@ class BxDolTemplate extends BxDolFactory implements iBxDolSingleton
             $sRoot = BX_DOL_URL_ROOT;
         }
 
+        $aParts = [];
         if(strpos($sName,'|') !== false) {
             $aParts = explode('|', $sName);
             $sName = $aParts[1];
@@ -3357,9 +3376,8 @@ class BxDolTemplate extends BxDolFactory implements iBxDolSingleton
         /**
          * try to find from received path
          */
-        if(!$sResult && @is_file(BX_DIRECTORY_PATH_ROOT . $aParts[0] . DIRECTORY_SEPARATOR . $aParts[1])) {
+        if(!$sResult && isset($aParts[0], $aParts[1]) && @is_file(BX_DIRECTORY_PATH_ROOT . $aParts[0] . DIRECTORY_SEPARATOR . $aParts[1]))
             $sResult = $sRoot . $aParts[0] . $sDivider . $aParts[1];
-        }
 
         if(isset($sLocationKey))
            $this->removeLocation($sLocationKey);

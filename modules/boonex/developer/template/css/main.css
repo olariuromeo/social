@@ -1,6 +1,6 @@
 /*--- Overwrite ---*/
 body.bx-dev-page-body-columns div.bx-std-page-column.bx-std-page-content .bx-std-page-column-cnt {
-    padding: 5rem 0 0 0;
+    padding: 4.0rem 0 0 0;
 }
 body.bx-dev-page-body-single div.bx-std-page-menu,
 body.bx-dev-page-body-columns div.bx-std-page-menu {
@@ -14,6 +14,17 @@ body.bx-dev-page-body-single div.bx-std-page-menu div.bx-std-page-column-cnt,
 body.bx-dev-page-body-columns div.bx-std-page-menu div.bx-std-page-column-cnt {
     padding-left: 0;
     padding-right: 0;
+}
+body.bx-dev-page-body-columns div.bx-std-page-menu div.bx-std-page-column-cnt {
+    -webkit-flex-direction: column;
+    flex-direction: column;
+}
+body.bx-dev-page-body-single div.bx-std-page-column.bx-std-page-menu .bx-std-pcm-actions,
+body.bx-dev-page-body-columns div.bx-std-page-column.bx-std-page-menu .bx-std-pcm-actions {
+    width: 2rem;
+    height: 2rem;
+
+    line-height: 2rem;
 }
 body.bx-dev-page-body-columns div.bx-std-page-column.bx-std-page-content {
     overflow-x: visible;
@@ -32,20 +43,20 @@ div.bx-dev-cb {
 
 /*--- Left Menu ---*/
 div.bx-dev-menu-main {
-	position: relative;
-	width: 65px;
-	border-right: 2px solid transparent;
+    position: relative;
+    width: 65px;
+    border-right: 2px solid transparent;
 }
 
 div.bx-dev-mm-cnt {
-	padding: 6px 16px 16px 16px;
+    padding: 8px 16px 16px 16px;
 }
 
 div.bx-dev-menu-main li {
     width:32px;
     height:32px;
-	margin: 0px 0px 16px 0px;
-	border-radius: 10px 10px 10px 10px;
+    margin: 0px 0px 16px 0px;
+    border-radius: 10px 10px 10px 10px;
 }
 
 
@@ -129,5 +140,5 @@ div.bx-dev-page-column.bx-dev-page-content {
     overflow-y: auto;
 }
 div.bx-dev-page-column.bx-dev-page-content .bx-dev-page-column-cnt {
-    padding: 1.5rem;
+    padding: 1.0rem;
 }

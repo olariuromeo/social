@@ -1,6 +1,6 @@
 <div id="bx-std-widget-__id__" class="bx-std-widget __widget_disabled_class__ __widget_featured_class__" style="__widget_styles__" data-name="__name__">
     <div class="bx-std-widget-cont">
-        <div class="bx-std-widget-icon bx-std-widget-icon-trans rounded-2xl overflow-hidden hover:ring hover:ring-blue-600 hover:ring-offset-2 hover:ring-offset-black hover:scale-105 active:scale-100 active:opacity-80 duration-300">
+        <div class="bx-std-widget-icon bx-std-widget-icon-trans rounded-2xl overflow-hidden hover:ring hover:ring-blue-600 hover:ring-offset-2 hover:ring-offset-gray-200 hover:scale-105 active:scale-100 active:opacity-80 duration-300">
             <a class="bx-std-widget-link block ring-white/5 ring-2 ring-inset rounded-2xl" href="__url__" <bx_if:show_click_icon>onClick="__content__"</bx_if:show_click_icon>>
                 <bx_if:icon>
                     <img src="<bx_icon_url:wi-empty.png />" />
@@ -17,10 +17,11 @@
             <div class="bx-std-widget-actions left">
                 <div class="bx-std-widget-actions-cnt">
                     <bx_repeat:actions>
-                        <div class="bx-std-widget-action bx-def-box-sizing">
-                            <a class="bx-std-widget-action bx-std-wa-__name__" href="__url__" <bx_if:show_click>onClick="__content__"</bx_if:show_click> title="__caption__">
-                                <bx_if:action_icon><i class="sys-icon __icon__" alt="__caption__"></i></bx_if:action_icon>
-                                <bx_if:action_image><img src="__icon_url__"  alt="__caption__" /></bx_if:action_image>
+                        <div class="bx-std-widget-action bg-gray-200 border border-black/10 rounded-2xl">
+                            <a class="bx-std-widget-action bx-std-wa-__name__ text-gray-600 hover:text-gray-700" href="__url__" <bx_if:show_click>onClick="__content__"</bx_if:show_click> title="__caption__">
+                                <bx_if:action_icon><i class="sys-icon __name__" alt="__caption__"></i></bx_if:action_icon>
+                                <bx_if:action_image><img src="__url__"  alt="__caption__" /></bx_if:action_image>
+                                <bx_if:action_image_inline>__content__</bx_if:action_image_inline>
                             </a>
                         </div>
                     </bx_repeat:actions>
@@ -31,10 +32,11 @@
             <div class="bx-std-widget-actions right">
                 <div class="bx-std-widget-actions-cnt">
                     <bx_repeat:actions>
-                        <div class="bx-std-widget-action bx-def-box-sizing">
-                            <a class="bx-std-widget-action bx-std-wa-__name__" href="__url__" <bx_if:show_click>onClick="__content__"</bx_if:show_click> title="__caption__">
-                                <bx_if:action_icon><i class="sys-icon __icon__" alt="__caption__"></i></bx_if:action_icon>
-                                <bx_if:action_image><img src="__icon_url__"  alt="__caption__" /></bx_if:action_image>
+                        <div class="bx-std-widget-action bg-gray-200 border border-black/10 rounded-2xl">
+                            <a class="bx-std-widget-action bx-std-wa-__name__ text-gray-600 hover:text-gray-700" href="__url__" <bx_if:show_click>onClick="__content__"</bx_if:show_click> title="__caption__">
+                                <bx_if:action_icon><i class="sys-icon __name__" alt="__caption__"></i></bx_if:action_icon>
+                                <bx_if:action_image><img src="__url__"  alt="__caption__" /></bx_if:action_image>
+                                <bx_if:action_image_inline>__content__</bx_if:action_image_inline>
                             </a>
                         </div>
                     </bx_repeat:actions>

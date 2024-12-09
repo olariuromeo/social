@@ -7,7 +7,7 @@
  * @{
  */
 
-class BxDolRelation extends BxDolConnection
+class BxDolRelation extends BxTemplConnection
 {
     protected static $_sParamEnabled = 'sys_relations_enable';
     protected static $_sParamTypes = 'sys_relations';
@@ -89,7 +89,7 @@ class BxDolRelation extends BxDolConnection
         if(!$iContent)
             $iContent = bx_process_input($_POST['id'], BX_DATA_INT);
 
-        return $this->_action($iInitiator ? $iInitiator : bx_get_logged_profile_id(), $iContent, 'removeConnection', '_sys_conn_err_connection_does_not_exists');
+        return $this->_action($iInitiator ? $iInitiator : bx_get_logged_profile_id(), $iContent, 'removeConnection', '_sys_conn_err_connection_does_not_exists', false, true);
     }
 
     /**

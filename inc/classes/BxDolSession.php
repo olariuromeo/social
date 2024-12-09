@@ -143,6 +143,9 @@ class BxDolSession extends BxDolFactory implements iBxDolSingleton
 
     function setUserId($iUserId)
     {
+        if (0 == $iUserId && $this->iUserId) { // update last active field when user is logged out
+            $this->oDb->updateLastActivityAccount($this->iUserId, time());
+        }
         $this->iUserId = $iUserId;
         $this->save();
     }

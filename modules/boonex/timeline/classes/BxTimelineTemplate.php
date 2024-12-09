@@ -2013,8 +2013,9 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
             }
         }
 
-        if ($aEvent['content']['url'])
-        $aEvent['url'] = bx_ltrim_str($aEvent['content']['url'], BX_DOL_URL_ROOT);
+        $aEvent['url'] = '';
+        if(!empty($aEvent['content']['url']))
+            $aEvent['url'] = bx_ltrim_str($aEvent['content']['url'], BX_DOL_URL_ROOT);
 
         if(!empty($aEvent['content']) && !empty($aEvent['content']['text'])) {
             $sMethodPrepare = '_prepareTextForOutput';
@@ -2027,9 +2028,6 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
                 if(($oEmbed = BxDolEmbed::getObjectInstance('sys_system')) !== false)
                     $aEvent['content']['embed'] = $oEmbed->getLinkHTML(current($aEvent['content']['links'])['url']);
             }
-
-            if (empty($aEvent['content']['embed']))
-                $aEvent['content']['embed'] = bx_linkify_embeded($aEvent['content']['text']);
         }
 
         if(empty($aEvent['menu_actions'])) {
@@ -2081,9 +2079,15 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
             $aEvent['cmts']['count'] = $aEvent['comments']['count'];
         }
 
+        /**
+         * 
+         * Disabled because it wilter out non-standard fields, 
+         * like price from Ads or dates from Events.
+         * 
         $aEvent['content'] = array_intersect_key($aEvent['content'], array_flip([
             'object_id', 'title', 'text', 'links', 'images', 'images_attach', 'videos', 'videos_attach', 'files', 'files_attach', 'parse_type', 'owner_name', 'embed'
         ]));
+         */
 
         return array_intersect_key($aEvent, array_flip([
             'id', 'type', 'object_privacy_view', 'content', 'labels', 'date', 'menu_actions', 'menu_counters', 'menu_manage', 'author_data', 'author_actions', 'url', 'owners', 'cmts'
@@ -3261,6 +3265,12 @@ class BxTimelineTemplate extends BxBaseModNotificationsTemplate
         }
 
         $this->_preparetDataActions(true, $aEvent, $aResult);
+
+        if($this->_bIsApi)
+            $aResult['content'] = array_intersect_key($aResult['content'], array_flip([
+                'object_id', 'url', 'title', 'text', 'links', 'images', 'images_attach', 'videos', 'videos_attach', 'files', 'files_attach', 'parse_type', 'owner_name', 'embed'
+            ]));
+
         return $aResult;
     }
 

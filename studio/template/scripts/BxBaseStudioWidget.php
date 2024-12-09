@@ -9,14 +9,20 @@
  */
 
 class BxBaseStudioWidget extends BxDolStudioWidget
-{    
+{
+    protected $bPageMenuTitle;
+    protected $bPageMenuIconsInline;
+
     protected $aPageCodeNoWrap;
 
     public function __construct($mixedPageName)
     {
         parent::__construct($mixedPageName);
 
-        $this->aPageCodeNoWrap = array();
+        $this->bPageMenuTitle = true;
+        $this->bPageMenuIconsInline = true;
+
+        $this->aPageCodeNoWrap = [];
     }
 
     public function getPageCss()
@@ -45,17 +51,18 @@ class BxBaseStudioWidget extends BxDolStudioWidget
         $oTemplate = BxDolStudioTemplate::getInstance();
         $oFunctions = BxTemplStudioFunctions::getInstance();
 
+        $sActions = '';
         $bActions = false;
-        $sActions = $this->getPageCaptionActions();
-        if(($bActions = strlen($sActions)) > 0)
+        if(false && ($sActions = $this->getPageCaptionActions()) && ($bActions = strlen($sActions)) > 0)    //--- Hidden for now.
             $sActions = $oFunctions->transBox('bx-std-pcap-menu-popup-actions', $sActions, true);
 
+        $sHelp = '';
         $bHelp = false;
-        $sHelp = $this->getPageCaptionHelp();
-        if(($bHelp = strlen($sHelp)) > 0)
+        if(false && ($sHelp = $this->getPageCaptionHelp()) && ($bHelp = strlen($sHelp)) > 0)    //--- Hidden for now.
             $sHelp = $oFunctions->transBox('bx-std-pcap-menu-popup-help', $sHelp, true);
 
-        $oTemplate->addInjection('injection_header', 'text', $sActions . $sHelp);
+        if($bActions || $bHelp)
+            $oTemplate->addInjection('injection_header', 'text', $sActions . $sHelp);
 
         //--- Menu Right ---//
         $aItemsRight = [];
@@ -113,12 +120,35 @@ class BxBaseStudioWidget extends BxDolStudioWidget
         return $sResult;
     }
 
+    public function getPageMenu($aMenu = [], $aMarkers = [])
+    {
+        if(!$this->bPageMenuTitle && $aMenu === false)
+            return '';
+
+        $oTemplate = BxDolStudioTemplate::getInstance();
+
+        $bActions = false;
+        if($this->bPageMenuTitle && ($sActions = $this->getPageCaptionActions()) && ($bActions = strlen($sActions)) > 0)
+            $oTemplate->addInjection('injection_header', 'text', BxTemplStudioFunctions::getInstance()->transBox('bx-std-pmenu-popup-actions', $sActions, true));
+
+        return $oTemplate->parseHtmlByName('page_menu.html', [
+            'title' => _t($this->aPage['caption']),
+            'bx_if:show_actions' => [
+                'condition' => $bActions,
+                'content' => [
+                    'onclick' => BX_DOL_STUDIO_PAGE_JS_OBJECT . ".togglePopup('actions', this)",
+                ]
+            ],
+            'menu' => parent::getPageMenu($aMenu, $aMarkers)
+        ]);
+    }
+
     public function getPageCode($sPage = '', $bWrap = true)
     {
         $sResult = parent::getPageCode($sPage, $bWrap);
         if($sResult === false)
             return false;
-
+ 
         if(!empty($this->aPage['wid_type']) && !BxDolStudioRolesUtils::getInstance()->isActionAllowed('use ' . $this->aPage['wid_type'])) {
             $this->setError('_Access denied');
             return false;
@@ -172,8 +202,8 @@ class BxBaseStudioWidget extends BxDolStudioWidget
     {
         $aTypeI2S = [
             BX_DB_CONTENT_ONLY => 'cnt',
-            BX_DB_DEF => 'cnt-ttl-bg bg-white rounded-2xl',
-            BX_DB_NO_CAPTION => 'cnt-bg bg-white rounded-2xl'
+            BX_DB_DEF => 'cnt-ttl-bg',
+            BX_DB_NO_CAPTION => 'cnt-bg'
         ];
         $iType = isset($aBlock['type'], $aTypeI2S[$aBlock['type']]) ? $aBlock['type'] : BX_DB_NO_CAPTION;
 
@@ -322,7 +352,7 @@ class BxBaseStudioWidget extends BxDolStudioWidget
     protected function getPageMenuObject($aMenu = array(), $aMarkers = array())
     {
         $oMenu = parent::getPageMenuObject($aMenu, $aMarkers);
-        $oMenu->setInlineIcons(false);
+        $oMenu->setInlineIcons($this->bPageMenuIconsInline);
 
         return $oMenu;
     }

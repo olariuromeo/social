@@ -99,6 +99,9 @@ class BxBaseStudioPage extends BxDolStudioPage
         return _t(!$this->bPageMultiple ? $this->aPage['caption'] : $this->aPage[$this->sPageSelected]['caption']);
     }
 
+    /*
+     * Left area in in page header. Contains 'home' button, page caption and search.
+     */
     public function getPageBreadcrumb()
     {
         $bPageHome = $this->aPage['name'] == 'home';
@@ -169,10 +172,12 @@ class BxBaseStudioPage extends BxDolStudioPage
         return '';
     }
 
-    public function getPageMenu($aMenu = array(), $aMarkers = array())
+    public function getPageMenu($aMenu = [], $aMarkers = [])
     {
-        $oMenu = $this->getPageMenuObject($aMenu, $aMarkers);
-        return $oMenu->getCode();
+        if($aMenu === false)
+            return '';
+
+        return $this->getPageMenuObject($aMenu, $aMarkers)->getCode();
     }
 
     public function getPageCode($sPage = '', $bWrap = true) {
@@ -203,7 +208,7 @@ class BxBaseStudioPage extends BxDolStudioPage
             'content' => $sContent
         ));
     }
-    
+
     protected function getPageCaptionAssistant()
     {
         if(!$this->_bShowHeaderRightAssistant)

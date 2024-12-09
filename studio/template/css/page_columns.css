@@ -23,6 +23,7 @@ div.bx-std-page-columns-cnt {
     */
 }
 
+/*--- Page Menu ---*/
 div.bx-std-page-column.bx-std-page-menu {
     position: relative;
     -webkit-flex: 0 0 20rem;
@@ -31,8 +32,8 @@ div.bx-std-page-column.bx-std-page-menu {
     width: 20rem;
     height: 100%;
 
-    border-right: 1px solid rgb(209, 213, 219);
-    background-color: rgb(229, 231, 235);
+    box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(40px);
 
     overflow-y: auto;
 }
@@ -45,15 +46,14 @@ div.bx-std-page-column.bx-std-page-menu div.bx-std-page-column-cnt {
     top: 0;
     padding-top: 5rem;
 }
-    
+
+/*--- Page Content ---*/
 div.bx-std-page-column.bx-std-page-content {
     position: relative;
     -webkit-flex-grow: 2;
     flex-grow: 2;
 
     height: 100%;
-
-    background-color: rgba(229, 231, 235, 1.0);
 
     overflow-x: hidden;
     overflow-y: auto;
@@ -64,5 +64,5 @@ div.bx-std-page-column.bx-std-page-content::-webkit-scrollbar {
 div.bx-std-page-column.bx-std-page-content div.bx-std-page-column-cnt {
     width: 100%;
     height: max-content;
-    padding: 6.0rem 1.0rem  1.0rem  1.0rem;
+    padding: 5.0rem 1.0rem  1.0rem  1.0rem;
 }
