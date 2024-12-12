@@ -1117,7 +1117,7 @@
     <string name="_adm_lmi_cpt_search_forms"><![CDATA[Search Forms]]></string>
     <string name="_adm_lmi_cpt_search_fields"><![CDATA[Search Fields]]></string>
     <string name="_adm_lmi_cpt_search_sortable_fields"><![CDATA[Search Sortable Fields]]></string>
-    <string name="_adm_lmi_cpt_splash"><![CDATA[Splash page]]></string>
+    <string name="_adm_lmi_cpt_splash"><![CDATA[Welcome page]]></string>
     <string name="_adm_lmi_cpt_displays"><![CDATA[Displays]]></string>
     <string name="_adm_lmi_cpt_downloaded"><![CDATA[Downloaded]]></string>
     <string name="_adm_lmi_cpt_etemplates_text"><![CDATA[Email Texts]]></string>
@@ -1147,6 +1147,7 @@
     <string name="_adm_lmi_cpt_purchases"><![CDATA[Purchases]]></string>
     <string name="_adm_lmi_cpt_pwa"><![CDATA[Progressive Web App]]></string>
     <string name="_adm_lmi_cpt_ractions"><![CDATA[Actions]]></string>
+    <string name="_adm_lmi_cpt_reports"><![CDATA[Reports]]></string>
     <string name="_adm_lmi_cpt_rlevels"><![CDATA[Levels]]></string>
     <string name="_adm_lmi_cpt_sets"><![CDATA[Sets]]></string>
     <string name="_adm_lmi_cpt_settings"><![CDATA[Settings]]></string>
@@ -1915,6 +1916,7 @@
         <string name="_adm_tmi_cpt_assistant"><![CDATA[Assistant]]></string>
 	<string name="_adm_tmi_cpt_site"><![CDATA[Go To Site]]></string>
         <string name="_adm_tmi_cpt_search"><![CDATA[Search...]]></string>
+        <string name="_adm_tmi_cpt_scheme"><![CDATA[Color Scheme]]></string>
 	<string name="_adm_tmi_cpt_tour"><![CDATA[Tour]]></string>
 	<string name="_adm_tmi_cpt_launcher"><![CDATA[Launcher]]></string>
         <string name="_adm_txt_active_api"><![CDATA[Available in App]]></string>
@@ -3474,9 +3476,8 @@ If it is not enabled then please consider implement this optimization, since it 
     <string name="_sys_menu_item_title_sa_edit"><![CDATA[Manage Apps]]></string>
     <string name="_sys_menu_item_title_system_sa_language"><![CDATA[Language]]></string>
     <string name="_sys_menu_item_title_sa_language"><![CDATA[Language]]></string>
-    <string name="_sys_menu_item_title_system_sa_scheme_light"><![CDATA[Light Mode]]></string>
+    <string name="_sys_menu_item_title_sa_scheme_auto"><![CDATA[System]]></string>
     <string name="_sys_menu_item_title_sa_scheme_light"><![CDATA[Light Mode]]></string>
-    <string name="_sys_menu_item_title_system_sa_scheme_dark"><![CDATA[Dark Mode]]></string>
     <string name="_sys_menu_item_title_sa_scheme_dark"><![CDATA[Dark Mode]]></string>
     <string name="_sys_menu_item_title_system_sa_logout"><![CDATA[Sign out]]></string>
     <string name="_sys_menu_item_title_sa_logout"><![CDATA[Sign out]]></string>
