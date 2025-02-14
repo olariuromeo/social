@@ -333,19 +333,28 @@ class BxBaseStudioBuilderPage extends BxDolStudioBuilderPage
 
             $sUri = $oForm->getCleanValue('uri');
             
-            $aPage = $this->oDb->getPages(array('type' => 'by_uri', 'value' => $sUri));
+            $aPage = $this->oDb->getPages(['type' => 'by_uri', 'value' => $sUri]);
             if(!empty($aPage) && is_array($aPage)) 
-            	return array('msg' => _t('_adm_bp_err_page_uri'));
+            	return ['msg' => _t('_adm_bp_err_page_uri')];
 
             $iVisibleFor = BxDolStudioUtils::getVisibilityValue($oForm->getCleanValue('visible_for'), $oForm->getCleanValue('visible_for_levels'));
             BxDolForm::setSubmittedValue('visible_for_levels', $iVisibleFor, $aForm['form_attrs']['method']);
             unset($oForm->aInputs['visible_for']);
 
-            $iId = (int)$oForm->insert(array('author' => bx_get_logged_profile_id(), 'added' => time(), 'object' => $sObject, 'url' => $this->sPageBaseUrl . $sUri));
+            $aValsToAdd = [
+                'author' => bx_get_logged_profile_id(), 
+                'object' => $sObject, 
+                'url' => $this->sPageBaseUrl . $sUri, 
+                'added' => time()
+            ];
+
+            $this->onSavePage($oForm, $aValsToAdd);
+
+            $iId = (int)$oForm->insert($aValsToAdd);
             if($iId != 0)
-                return array('eval' => $sJsObject . '.onCreatePage(\'' . $sModule . '\', \'' . $sObject . '\')');
+                return ['eval' => $sJsObject . '.onCreatePage(\'' . $sModule . '\', \'' . $sObject . '\')'];
             else
-                return array('msg' => _t('_adm_bp_err_page_create'));
+                return ['msg' => _t('_adm_bp_err_page_create')];
         }
 
         $sContent = BxTemplStudioFunctions::getInstance()->popupBox($this->aHtmlIds['add_popup_id'], _t('_adm_bp_txt_create_popup'), $oTemplate->parseHtmlByName('bp_add_page.html', array(
@@ -401,6 +410,8 @@ class BxBaseStudioBuilderPage extends BxDolStudioBuilderPage
                 BxDolForm::setSubmittedValue('visible_for_levels', $iVisibleFor, $aForm['form_attrs']['method']);
                 unset($oForm->aInputs['visible_for']);
             }
+
+            $this->onSavePage($oForm, $this->aPageRebuild);
 
             if($oForm->update($this->aPageRebuild['id'])) {
                 $iLevelId = $oForm->getCleanValue('layout_id');
@@ -922,7 +933,7 @@ class BxBaseStudioBuilderPage extends BxDolStudioBuilderPage
                 return array('msg' => _t('_adm_bp_err_block_edit'));
         }
 
-        $sContent = BxTemplStudioFunctions::getInstance()->popupBox($this->aHtmlIds['edit_block_popup_id'], _t('_adm_bp_txt_edit_block_popup', _t($aBlock['title'])), $oTemplate->parseHtmlByName('bp_add_block.html', array(
+        $sContent = BxTemplStudioFunctions::getInstance()->popupBox($this->aHtmlIds['edit_block_popup_id'], _t('_adm_bp_txt_edit_block_popup', _t($aBlock['title_system'])), $oTemplate->parseHtmlByName('bp_add_block.html', array(
         	'action' => 'edit',
             'form_id' => $aForm['form_attrs']['id'],
             'form' => $oForm->getCode(true)
@@ -1822,19 +1833,19 @@ class BxBaseStudioBuilderPage extends BxDolStudioBuilderPage
 
         $oForm = new BxTemplStudioFormView(array());
 
-        $aInputCheckbox = array(
+        $aInputCheckbox = [
             'type' => 'checkbox',
             'name' => 'blocks[]',
-            'attrs' => array(
+            'attrs' => [
                 'onChange' => 'javascript:' . $sJsObject . '.onSelectBlock(this);'
-            ),
+            ],
             'value' => ''
-        );
+        ];
 
-        $aTmplParams = array(
+        $aTmplParams = [
             'html_block_list_id' => $this->aHtmlIds['block_list_id'] . $sModule,
-            'bx_repeat:blocks' => array()
-        );
+            'bx_repeat:blocks' => []
+        ];
 
         $aBlocks = $this->getBlocks($sModule);
         foreach($aBlocks as $aBlock) {
@@ -1842,44 +1853,48 @@ class BxBaseStudioBuilderPage extends BxDolStudioBuilderPage
 
             $aInputCheckbox['value'] = $aBlock['id'];
 
-            $aTmplParams['bx_repeat:blocks'][] = array(
+            $aTmplParams['bx_repeat:blocks'][] = [
                 'js_object' => $sJsObject,
                 'html_id' => $this->aHtmlIds['block_id'] . $aBlock['id'],
                 'bx_if:is_inactive' => array(
                     'condition' => false,
-                    'content' => array()
+                    'content' => [true]
                 ),
-                'bx_if:show_link' => array(
+                'bx_if:show_link' => [
                     'condition' => false,
-                    'content' => array()
-                ),
-                'bx_if:show_text' => array(
+                    'content' => [true]
+                ],
+                'bx_if:show_text' => [
                     'condition' => true,
-                    'content' => array(
+                    'content' => [
                         'title' => _t(!empty($aBlock['title_system']) ? $aBlock['title_system'] : $aBlock['title']),
-                    )
-                ),
-                'bx_if:image' => array (
-	                'condition' => (bool)$sIconUrl,
-	                'content' => array('icon_url' => $sIconUrl),
-	            ),
-				'bx_if:icon' => array (
-	                'condition' => (bool)$sIcon,
-	                'content' => array('icon' => $sIcon),
-	            ),
+                    ]
+                ],
+                'bx_if:show_api' => [
+                    'condition' => false,
+                    'content' => [true]
+                ],
+                'bx_if:image' => [
+                    'condition' => (bool)$sIconUrl,
+                    'content' => array('icon_url' => $sIconUrl),
+                ],
+                'bx_if:icon' => [
+                    'condition' => (bool)$sIcon,
+                    'content' => ['icon' => $sIcon],
+                ],
                 'module' => $this->getModuleTitle($aBlock['module']),
                 'visible_for' => _t('_adm_bp_txt_visible_for', BxDolStudioUtils::getVisibilityTitle($aBlock['visible_for_levels'])),
-                'bx_if:show_checkbox' => array(
+                'bx_if:show_checkbox' => [
                     'condition' => true,
-                    'content' => array(
+                    'content' => [
                         'content' => $oForm->genRow($aInputCheckbox)
-                    )
-                ),
-                'bx_if:show_drag_handle' => array(
+                    ]
+                ],
+                'bx_if:show_drag_handle' => [
                     'condition' => false,
-                    'content' => array()
-                )
-            );
+                    'content' => []
+                ]
+            ];
         }
 
         return $oTemplate->parseHtmlByName('bp_blocks_list.html', $aTmplParams);

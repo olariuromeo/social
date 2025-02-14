@@ -4,7 +4,7 @@
 
 -- --------------------------------------------------------
 
-DROP TABLE IF EXISTS `sys_keys`, `sys_objects_editor`, `sys_objects_player`, `sys_objects_embeds`, `sys_objects_file_handlers`, `sys_objects_captcha`, `sys_objects_cmts`, `sys_cmts_images`, `sys_cmts_images_preview`, `sys_cmts_images2entries`, `sys_cmts_ids`, `sys_cmts_meta_keywords`, `sys_cmts_meta_mentions`, `sys_cmts_votes`, `sys_cmts_votes_track`, `sys_cmts_reactions`, `sys_cmts_reactions_track`, `sys_cmts_reports`, `sys_cmts_reports_track`, `sys_cmts_scores`, `sys_cmts_scores_track`, `sys_email_templates`, `sys_queue_push`, `sys_queue_email`, `sys_options`, sys_options_types, `sys_options_categories`, `sys_options_mixes`, `sys_options_mixes2options`,  `sys_localization_categories`, `sys_localization_keys`, `sys_localization_languages`, `sys_localization_strings`, `sys_acl_actions`, `sys_acl_actions_track`, `sys_acl_matrix`, `sys_acl_levels`, `sys_sessions`, `sys_acl_levels_members`, `sys_objects_rss`, `sys_objects_search`, `sys_objects_search_extended`, `sys_search_extended_fields`, `sys_search_extended_sorting_fields`, `sys_statistics`, `sys_audit`, `sys_alerts`, `sys_alerts_cache_triggers`, `sys_alerts_handlers`, `sys_injections`, `sys_injections_admin`, `sys_modules`, `sys_modules_file_tracks`, `sys_modules_relations`, `sys_permalinks`, `sys_objects_privacy`, `sys_privacy_defaults`, `sys_privacy_groups`, `sys_privacy_groups_custom`, `sys_privacy_groups_custom_members`, `sys_privacy_groups_custom_memberships`, `sys_objects_recommendation`, `sys_recommendation_criteria`, `sys_recommendation_data`, `sys_objects_auths`, `sys_objects_score`, `sys_objects_vote`, `sys_objects_report`, `sys_objects_view`, `sys_objects_favorite`, `sys_objects_feature`, `sys_objects_chart`, `sys_objects_content_info`, `sys_content_info_grids`, `sys_background_jobs`, `sys_cron_jobs`, `sys_objects_storage`, `sys_objects_uploader`, `sys_storage_user_quotas`, `sys_storage_tokens`, `sys_storage_ghosts`, `sys_storage_deletions`, `sys_storage_mime_types`, `sys_objects_transcoder`, `sys_transcoder_images_files`, `sys_transcoder_videos_files`, `sys_transcoder_audio_files`, `sys_transcoder_filters`, `sys_transcoder_queue`, `sys_transcoder_queue_files`, `sys_accounts`, `sys_accounts_password`, `sys_profiles`, `sys_objects_form`, `sys_form_displays`, `sys_form_inputs`, `sys_form_inputs_privacy`, `sys_form_display_inputs`, `sys_form_pre_lists`, `sys_form_pre_values`, `sys_menu_templates`, `sys_objects_menu`, `sys_menu_sets`, `sys_menu_items`, `sys_objects_grid`, `sys_grid_fields`, `sys_grid_actions`, `sys_objects_connection`, `sys_profiles_conn_bans`, `sys_profiles_conn_relations`, `sys_profiles_conn_subscriptions`, `sys_profiles_conn_friends`, `sys_objects_page`, `sys_pages_types`, `sys_pages_layouts`, `sys_pages_design_boxes`, `sys_pages_content_placeholders`, `sys_pages_blocks`, `sys_pages_blocks_data`, `sys_labels`, `sys_objects_metatags`, `sys_objects_category`, `sys_objects_live_updates`, `sys_objects_payments`, `sys_files`, `sys_images`, `sys_images_custom`, `sys_images_resized`, `sys_images_editor`, `sys_images_editor_resized`, `sys_wiki_files`, `sys_wiki_images_resized`, `sys_rewrite_rules`, `sys_seo_links`, `sys_seo_uri_rewrites`, `sys_api_keys`, `sys_api_origins`, `sys_agents_models`, `sys_agents_automators`, `sys_agents_automators_providers`, `sys_agents_automators_helpers`, `sys_agents_automators_assistants`, `sys_agents_automators_messages`, `sys_agents_provider_types`, `sys_agents_provider_options`, `sys_agents_providers`, `sys_agents_providers_values`, `sys_agents_helpers`, `sys_agents_assistants`, `sys_agents_assistants_files`, `sys_agents_assistants_chats`, `sys_agents_assistants_chats_messages`, `sys_preloader`, `sys_std_roles`, `sys_std_roles_actions`, `sys_std_roles_actions2roles`, `sys_std_roles_members`, `sys_std_pages`, `sys_std_widgets`, `sys_std_widgets_bookmarks`, `sys_std_pages_widgets`, `sys_categories`, `sys_categories2objects`, `sys_objects_logs`, `sys_objects_location_field`, `sys_objects_location_map`, `sys_objects_wiki`, `sys_pages_wiki_blocks`, `sys_badges`, `sys_badges2objects`, `sys_form_fields_reaction`, `sys_form_fields_reaction_track`, `sys_form_fields_votes`, `sys_form_fields_votes_track`, `sys_form_fields_ids`, `sys_iframely_data`, `sys_embeded_data`;
+DROP TABLE IF EXISTS `sys_keys`, `sys_objects_editor`, `sys_objects_player`, `sys_objects_push`, `sys_objects_sms`, `sys_objects_embeds`, `sys_objects_file_handlers`, `sys_objects_captcha`, `sys_objects_cmts`, `sys_cmts_images`, `sys_cmts_images_preview`, `sys_cmts_images2entries`, `sys_cmts_ids`, `sys_cmts_meta_keywords`, `sys_cmts_meta_mentions`, `sys_cmts_votes`, `sys_cmts_votes_track`, `sys_cmts_reactions`, `sys_cmts_reactions_track`, `sys_cmts_reports`, `sys_cmts_reports_track`, `sys_cmts_scores`, `sys_cmts_scores_track`, `sys_email_templates`, `sys_queue_push`, `sys_queue_email`, `sys_options`, sys_options_types, `sys_options_categories`, `sys_options_mixes`, `sys_options_mixes2options`,  `sys_localization_categories`, `sys_localization_keys`, `sys_localization_languages`, `sys_localization_strings`, `sys_acl_actions`, `sys_acl_actions_track`, `sys_acl_matrix`, `sys_acl_levels`, `sys_sessions`, `sys_acl_levels_members`, `sys_objects_rss`, `sys_objects_search`, `sys_objects_search_extended`, `sys_search_extended_fields`, `sys_search_extended_sorting_fields`, `sys_statistics`, `sys_audit`, `sys_alerts`, `sys_alerts_cache_triggers`, `sys_alerts_handlers`, `sys_injections`, `sys_injections_admin`, `sys_modules`, `sys_modules_file_tracks`, `sys_modules_relations`, `sys_permalinks`, `sys_objects_privacy`, `sys_privacy_defaults`, `sys_privacy_groups`, `sys_privacy_groups_custom`, `sys_privacy_groups_custom_members`, `sys_privacy_groups_custom_memberships`, `sys_objects_recommendation`, `sys_recommendation_criteria`, `sys_recommendation_data`, `sys_objects_auths`, `sys_objects_score`, `sys_objects_vote`, `sys_objects_report`, `sys_objects_view`, `sys_objects_favorite`, `sys_objects_feature`, `sys_objects_chart`, `sys_objects_content_info`, `sys_content_info_grids`, `sys_background_jobs`, `sys_cron_jobs`, `sys_objects_storage`, `sys_objects_uploader`, `sys_storage_user_quotas`, `sys_storage_tokens`, `sys_storage_ghosts`, `sys_storage_deletions`, `sys_storage_mime_types`, `sys_objects_transcoder`, `sys_transcoder_images_files`, `sys_transcoder_videos_files`, `sys_transcoder_audio_files`, `sys_transcoder_filters`, `sys_transcoder_queue`, `sys_transcoder_queue_files`, `sys_accounts`, `sys_accounts_password`, `sys_profiles`, `sys_objects_form`, `sys_form_displays`, `sys_form_inputs`, `sys_form_inputs_privacy`, `sys_form_display_inputs`, `sys_form_pre_lists`, `sys_form_pre_values`, `sys_menu_templates`, `sys_objects_menu`, `sys_menu_sets`, `sys_menu_items`, `sys_objects_grid`, `sys_grid_fields`, `sys_grid_actions`, `sys_objects_connection`, `sys_profiles_conn_bans`, `sys_profiles_conn_relations`, `sys_profiles_conn_subscriptions`, `sys_profiles_conn_friends`, `sys_objects_page`, `sys_pages_types`, `sys_pages_layouts`, `sys_pages_design_boxes`, `sys_pages_content_placeholders`, `sys_pages_blocks`, `sys_pages_blocks_data`, `sys_labels`, `sys_objects_metatags`, `sys_objects_category`, `sys_objects_live_updates`, `sys_objects_payments`, `sys_files`, `sys_images`, `sys_images_custom`, `sys_images_resized`, `sys_images_editor`, `sys_images_editor_resized`, `sys_wiki_files`, `sys_wiki_images_resized`, `sys_rewrite_rules`, `sys_seo_links`, `sys_seo_uri_rewrites`, `sys_api_keys`, `sys_api_origins`, `sys_agents_models`, `sys_agents_automators`, `sys_agents_automators_providers`, `sys_agents_automators_helpers`, `sys_agents_automators_assistants`, `sys_agents_automators_messages`, `sys_agents_provider_types`, `sys_agents_provider_options`, `sys_agents_providers`, `sys_agents_providers_values`, `sys_agents_helpers`, `sys_agents_assistants`, `sys_agents_assistants_files`, `sys_agents_assistants_chats`, `sys_agents_assistants_chats_messages`, `sys_preloader`, `sys_std_roles`, `sys_std_roles_actions`, `sys_std_roles_actions2roles`, `sys_std_roles_members`, `sys_std_pages`, `sys_std_widgets`, `sys_std_widgets_bookmarks`, `sys_std_pages_widgets`, `sys_categories`, `sys_categories2objects`, `sys_objects_logs`, `sys_objects_location_field`, `sys_objects_location_map`, `sys_objects_wiki`, `sys_pages_wiki_blocks`, `sys_badges`, `sys_badges2objects`, `sys_form_fields_reaction`, `sys_form_fields_reaction_track`, `sys_form_fields_votes`, `sys_form_fields_votes_track`, `sys_form_fields_ids`, `sys_iframely_data`, `sys_embeded_data`;
 
 ALTER DATABASE DEFAULT CHARACTER SET 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
 SET NAMES 'utf8mb4' COLLATE 'utf8mb4_unicode_ci';
@@ -58,6 +58,40 @@ CREATE TABLE `sys_objects_player` (
 
 INSERT INTO `sys_objects_player` (`object`, `title`, `skin`, `override_class_name`, `override_class_file`) VALUES
 ('sys_html5', 'HTML5', '', 'BxTemplPlayerHtml5', '');
+
+
+-- --------------------------------------------------------
+
+
+CREATE TABLE `sys_objects_push` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `object` varchar(64) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `override_class_name` varchar(255) NOT NULL,
+  `override_class_file` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `object` (`object`)
+);
+
+INSERT INTO `sys_objects_push` (`object`, `title`, `override_class_name`, `override_class_file`) VALUES
+('sys_onesignal', 'OneSignal', 'BxTemplPushOneSignal', '');
+
+
+-- --------------------------------------------------------
+
+
+CREATE TABLE `sys_objects_sms` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `object` varchar(64) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `override_class_name` varchar(255) NOT NULL,
+  `override_class_file` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `object` (`object`)
+);
+
+INSERT INTO `sys_objects_sms` (`object`, `title`, `override_class_name`, `override_class_file`) VALUES
+('sys_twilio', 'Twilio', 'BxDolSmsTwilio', '');
 
 
 -- --------------------------------------------------------
@@ -360,7 +394,7 @@ INSERT INTO `sys_options`(`category_id`, `name`, `caption`, `value`, `type`, `ex
 
 (@iCategoryId, 'sys_search_keyword_min_len', '_adm_stg_cpt_option_sys_search_keyword_min_len', '1', 'digit', '', '', '', '', 80),
 
-(@iCategoryId, 'sys_relations_enable', '_adm_stg_cpt_option_sys_relations_enable', 'on', 'checkbox', '', '', '', '', 90),
+(@iCategoryId, 'sys_relations_enable', '_adm_stg_cpt_option_sys_relations_enable', '', 'checkbox', '', '', '', '', 90),
 (@iCategoryId, 'sys_relations', '_adm_stg_cpt_option_sys_relations', '', 'list', 'a:4:{s:6:"module";s:6:"system";s:6:"method";s:21:"get_options_relations";s:6:"params";a:0:{}s:5:"class";s:13:"TemplServices";}', '', '', '', 91),
 
 (@iCategoryId, 'enable_gd', '_adm_stg_cpt_option_enable_gd', 'on', 'checkbox', '', '', '', '', 100),
@@ -377,6 +411,7 @@ INSERT INTO `sys_options`(`category_id`, `name`, `caption`, `value`, `type`, `ex
 (@iCategoryId, 'sys_curl_ssl_allow_untrusted', '_adm_stg_cpt_option_sys_ssl_allow_untrusted', '', 'checkbox', '', '', '', '', 145),
 
 (@iCategoryId, 'sys_csp_frame_ancestors', '_adm_stg_cpt_option_sys_csp_frame_ancestors', '*', 'digit', '', '', '', '', 150),
+(@iCategoryId, 'sys_x_frame_options', '_adm_stg_cpt_option_sys_x_frame_options', 'SAMEORIGIN', 'select', 'Off,SAMEORIGIN,DENY', '', '', '', 151),
 (@iCategoryId, 'sys_samesite_cookies', '_adm_stg_cpt_option_sys_samesite_cookies', 'Lax', 'select', 'None,Lax,Strict', '', '', '', 152),
 
 (@iCategoryId, 'sys_notify_to_approve_by_role', '_adm_stg_cpt_option_sys_notify_to_approve_by_role', '', 'checkbox', '', '', '', '', 160),
@@ -497,8 +532,10 @@ INSERT INTO `sys_options`(`category_id`, `name`, `caption`, `info`, `value`, `ty
 
 (@iCategoryId, 'sys_profile_bot', '_adm_stg_cpt_option_sys_profile_bot', '_adm_stg_inf_option_sys_profile_bot', '', 'select', 'a:3:{s:6:"module";s:6:"system";s:6:"method";s:23:"get_options_profile_bot";s:5:"class";s:13:"TemplServices";}', '', '', 40),
 
-(@iCategoryId, 'sys_hide_post_to_context_for_privacy', '_adm_stg_cpt_option_sys_hide_post_to_context_for_privacy', '', '', 'list', 'a:3:{s:6:"module";s:6:"system";s:6:"method";s:44:"get_options_module_list_for_privacy_selector";s:5:"class";s:13:"TemplServices";}', '', '', 50),
-(@iCategoryId, 'sys_treat_cxt_in_cxt_as_cnt', '_adm_stg_cpt_option_sys_treat_cxt_in_cxt_as_cnt', '', 'on', 'checkbox', '', '', '', 51),
+(@iCategoryId, 'sys_enable_post_to_context_for_privacy', '_adm_stg_cpt_option_sys_enable_post_to_context_for_privacy', '', '', 'checkbox', '', '', '', 50),
+(@iCategoryId, 'sys_hide_post_to_context_for_privacy', '_adm_stg_cpt_option_sys_hide_post_to_context_for_privacy', '', '', 'list', 'a:3:{s:6:"module";s:6:"system";s:6:"method";s:44:"get_options_module_list_for_privacy_selector";s:5:"class";s:13:"TemplServices";}', '', '', 51),
+(@iCategoryId, 'sys_treat_cxt_in_cxt_as_cnt', '_adm_stg_cpt_option_sys_treat_cxt_in_cxt_as_cnt', '', 'on', 'checkbox', '', '', '', 52),
+(@iCategoryId, 'sys_check_fan_in_parent_context', '_adm_stg_cpt_option_sys_check_fan_in_parent_context', '', 'on', 'checkbox', '', '', '', 55),
 
 (@iCategoryId, 'sys_vote_reactions_quick_mode', '_adm_stg_cpt_option_sys_vote_reactions_quick_mode', '', 'on', 'checkbox', '', '', '', 60),
 
@@ -682,25 +719,29 @@ INSERT INTO `sys_options_categories`(`type_id`, `name`, `caption`, `hidden`, `or
 SET @iCategoryId = LAST_INSERT_ID();
 
 INSERT INTO `sys_options`(`category_id`, `name`, `caption`, `value`, `type`, `extra`, `check`, `check_error`, `order`) VALUES
-(@iCategoryId, 'sys_push_app_id', '_adm_stg_cpt_option_sys_push_app_id', '', 'digit', '', '', '', 1),
-(@iCategoryId, 'sys_push_rest_api', '_adm_stg_cpt_option_sys_push_rest_api', '', 'digit', '', '', '', 2),
-(@iCategoryId, 'sys_push_short_name', '_adm_stg_cpt_option_sys_push_short_name', '', 'digit', '', '', '', 3),
-(@iCategoryId, 'sys_push_safari_id', '_adm_stg_cpt_option_sys_push_safari_id', '', 'digit', '', '', '', 4),
+(@iCategoryId, 'sys_push_default', '_adm_stg_cpt_option_sys_push_default', '', 'select', 'a:3:{s:6:"module";s:6:"system";s:6:"method";s:24:"get_options_push_default";s:5:"class";s:13:"TemplServices";}', '', '', 1),
 
 (@iCategoryId, 'sys_push_queue_send_per_start', '_adm_stg_cpt_option_sys_push_queue_send_per_start', '500',  'digit', '', '', '', 10),
-(@iCategoryId, 'sys_push_queue_send_per_start_to_recipient', '_adm_stg_cpt_option_sys_push_queue_send_per_start_to_recipient', '2',  'digit', '', '', '', 11);
+(@iCategoryId, 'sys_push_queue_send_per_start_to_recipient', '_adm_stg_cpt_option_sys_push_queue_send_per_start_to_recipient', '2',  'digit', '', '', '', 11),
+
+(@iCategoryId, 'sys_push_onesignal_app_id', '_adm_stg_cpt_option_sys_push_onesignal_app_id', '', 'digit', '', '', '', 21),
+(@iCategoryId, 'sys_push_onesignal_rest_api', '_adm_stg_cpt_option_sys_push_onesignal_rest_api', '', 'digit', '', '', '', 22),
+(@iCategoryId, 'sys_push_onesignal_short_name', '_adm_stg_cpt_option_sys_push_onesignal_short_name', '', 'digit', '', '', '', 23),
+(@iCategoryId, 'sys_push_onesignal_safari_id', '_adm_stg_cpt_option_sys_push_onesignal_safari_id', '', 'digit', '', '', '', 24);
 
 
 --
 -- CATEGORY: Twilio gate settings
 --
-INSERT INTO `sys_options_categories`(`type_id`, `name`, `caption`, `hidden`, `order`) VALUES (@iTypeId, 'twilio_gate', '_adm_stg_cpt_category_twilio_gate', 0, 18);
+INSERT INTO `sys_options_categories`(`type_id`, `name`, `caption`, `hidden`, `order`) VALUES (@iTypeId, 'sms', '_adm_stg_cpt_category_sms', 0, 18);
 SET @iCategoryId = LAST_INSERT_ID();
 
 INSERT INTO `sys_options`(`category_id`, `name`, `caption`, `value`, `type`, `extra`, `check`, `check_error`, `order`) VALUES
-(@iCategoryId, 'sys_twilio_gate_sid', '_adm_stg_cpt_option_sys_twilio_gate_sid', '', 'digit', '', '', '', 1),
-(@iCategoryId, 'sys_twilio_gate_token', '_adm_stg_cpt_option_sys_twilio_gate_token', '', 'digit', '', '', '', 2),
-(@iCategoryId, 'sys_twilio_gate_from_number', '_adm_stg_cpt_option_sys_twilio_gate_from_number', '', 'digit', '', '', '', 3);
+(@iCategoryId, 'sys_sms_default', '_adm_stg_cpt_option_sys_sms_default', '', 'select', 'a:3:{s:6:"module";s:6:"system";s:6:"method";s:23:"get_options_sms_default";s:5:"class";s:13:"TemplServices";}', '', '', 1),
+
+(@iCategoryId, 'sys_sms_twilio_sid', '_adm_stg_cpt_option_sys_sms_twilio_sid', '', 'digit', '', '', '', 11),
+(@iCategoryId, 'sys_sms_twilio_token', '_adm_stg_cpt_option_sys_sms_twilio_token', '', 'digit', '', '', '', 12),
+(@iCategoryId, 'sys_sms_twilio_from_number', '_adm_stg_cpt_option_sys_sms_twilio_from_number', '', 'digit', '', '', '', 13);
 
 
 --
@@ -2367,20 +2408,21 @@ CREATE TABLE `sys_privacy_groups` (
   `check` text NOT NULL default '',
   `active` tinyint(4) NOT NULL default '1',
   `visible` tinyint(4) NOT NULL default '1',
+  `order` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 );
 
-INSERT INTO `sys_privacy_groups`(`id`, `title`, `check`, `active`, `visible`) VALUES
-('1', '', '', 1, 0),
-('2', '_sys_ps_group_title_me_only', '@me_only', 1, 1),
-('3', '_sys_ps_group_title_public', '@public', 1, 1),
-('4', '_sys_ps_group_title_members', '@members', 0, 0),
-('5', '_sys_ps_group_title_friends', '@friends', 1, 1),
-('6', '_sys_ps_group_title_friends_selected', '@friends_selected_by_object', 1, 1),
-('7', '_sys_ps_group_title_relations', '@relations', 1, 1),
-('8', '_sys_ps_group_title_relations_selected', '@relations_selected_by_object', 1, 1),
-('9', '_sys_ps_group_title_memberships_selected', '@memberships_selected_by_object', 1, 1),
-('99', '_sys_ps_group_title_custom', '@custom_by_object', 0, 0);
+INSERT INTO `sys_privacy_groups`(`id`, `title`, `check`, `active`, `visible`, `order`) VALUES
+('1', '', '', 1, 0, 0),
+('2', '_sys_ps_group_title_me_only', '@me_only', 1, 1, 7),
+('3', '_sys_ps_group_title_public', '@public', 1, 1, 1),
+('4', '_sys_ps_group_title_members', '@members', 0, 0, 0),
+('5', '_sys_ps_group_title_friends', '@friends', 1, 1, 2),
+('6', '_sys_ps_group_title_friends_selected', '@friends_selected_by_object', 1, 1, 3),
+('7', '_sys_ps_group_title_relations', '@relations', 1, 1, 4),
+('8', '_sys_ps_group_title_relations_selected', '@relations_selected_by_object', 1, 1, 5),
+('9', '_sys_ps_group_title_memberships_selected', '@memberships_selected_by_object', 1, 1, 6),
+('99', '_sys_ps_group_title_custom', '@custom_by_object', 0, 0, 0);
 
 CREATE TABLE `sys_privacy_groups_custom` (
   `id` int(11) unsigned NOT NULL auto_increment,
@@ -4646,6 +4688,7 @@ CREATE TABLE IF NOT EXISTS `sys_objects_menu` (
   `set_name` varchar(64) NOT NULL,
   `module` varchar(32) NOT NULL,
   `template_id` int(11) NOT NULL,
+  `config_api` text NOT NULL,
   `persistent` tinyint(4) NOT NULL DEFAULT '0',
   `deletable` tinyint(4) NOT NULL DEFAULT '1',
   `active` tinyint(4) NOT NULL DEFAULT '0',
@@ -4765,7 +4808,8 @@ CREATE TABLE IF NOT EXISTS `sys_menu_items` (
   `hidden_on` varchar(255) NOT NULL DEFAULT '',
   `hidden_on_cxt` varchar(255) NOT NULL DEFAULT '',
   `hidden_on_pt` int(11) NOT NULL DEFAULT '0',
-  `hidden_on_col` int(11) NOT NULL DEFAULT '0',    
+  `hidden_on_col` int(11) NOT NULL DEFAULT '0',
+  `config_api` text NOT NULL,
   `primary` tinyint(4) NOT NULL DEFAULT '0',
   `collapsed` tinyint(4) NOT NULL DEFAULT '0',
   `active` tinyint(4) NOT NULL DEFAULT '1',
@@ -4842,7 +4886,7 @@ INSERT INTO `sys_menu_items` (`set_name`, `module`, `name`, `title_system`, `tit
 ('sys_account_notifications', 'system', 'cart', '_sys_menu_item_title_system_cart', '_sys_menu_item_title_cart', 'cart.php', '', '', 'cart-plus col-red3', 'a:4:{s:6:"module";s:6:"system";s:6:"method";s:20:"get_cart_items_count";s:6:"params";a:0:{}s:5:"class";s:21:"TemplPaymentsServices";}', '', 2147483646, 1, 1, 6),
 ('sys_account_notifications', 'system', 'orders', '_sys_menu_item_title_system_orders', '_sys_menu_item_title_orders', 'orders.php', '', '', 'cart-arrow-down col-green3', 'a:4:{s:6:"module";s:6:"system";s:6:"method";s:16:"get_orders_count";s:6:"params";a:1:{i:0;s:3:"new";}s:5:"class";s:21:"TemplPaymentsServices";}', '', 2147483646, 0, 1, 7),
 ('sys_account_notifications', 'system', 'invoices', '_sys_menu_item_title_system_invoices', '_sys_menu_item_title_invoices', 'invoices.php', '', '', 'file-invoice col-green3', 'a:4:{s:6:"module";s:6:"system";s:6:"method";s:18:"get_invoices_count";s:6:"params";a:1:{i:0;s:6:"unpaid";}s:5:"class";s:21:"TemplPaymentsServices";}', '', 2147483646, 0, 1, 8),
-('sys_account_notifications', 'system', 'logout', '_sys_menu_item_title_system_logout', '_sys_menu_item_title_logout', 'logout.php', '', '', 'sign-out-alt', '', '', 2147483646, 1, 1, 9999);
+('sys_account_notifications', 'system', 'logout', '_sys_menu_item_title_system_logout', '_sys_menu_item_title_logout', 'page.php?i=logout', '', '', 'sign-out-alt', '', '', 2147483646, 1, 1, 9999);
 
 -- account settings menu
 INSERT INTO `sys_menu_items` (`set_name`, `module`, `name`, `title_system`, `title`, `link`, `onclick`, `target`, `icon`, `submenu_object`, `visible_for_levels`, `visibility_custom`, `active`, `copyable`, `order`) VALUES
@@ -4972,7 +5016,7 @@ CREATE TABLE IF NOT EXISTS `sys_objects_grid` (
   `sorting_fields_translatable` text NOT NULL,
   `visible_for_levels` int(11) NOT NULL DEFAULT '2147483647',
   `responsive` tinyint(4) NOT NULL DEFAULT '1',
-  `show_total_count` tinyint(4) NOT NULL DEFAULT '1',
+  `show_total_count` tinyint(4) NOT NULL DEFAULT '0',
   `override_class_name` varchar(255) NOT NULL,
   `override_class_file` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
@@ -5820,6 +5864,7 @@ CREATE TABLE IF NOT EXISTS `sys_objects_page` (
   `cache_editable` tinyint(4) NOT NULL DEFAULT '1',
   `inj_head` text NOT NULL,
   `inj_footer` text NOT NULL,
+  `config_api` text NOT NULL,
   `deletable` tinyint(1) NOT NULL,
   `override_class_name` varchar(255) NOT NULL,
   `override_class_file` varchar(255) NOT NULL,
@@ -5984,6 +6029,7 @@ CREATE TABLE IF NOT EXISTS `sys_pages_blocks` (
   `text_updated` int(11) NOT NULL,
   `help` varchar(255) NOT NULL,
   `cache_lifetime` int(11) NOT NULL DEFAULT '0',
+  `config_api` text NOT NULL,
   `deletable` tinyint(4) NOT NULL DEFAULT '1',
   `copyable` tinyint(4) NOT NULL DEFAULT '1',
   `active` tinyint(4) NOT NULL DEFAULT '1',
@@ -6281,7 +6327,7 @@ CREATE TABLE `sys_objects_logs` (
 
 INSERT INTO `sys_objects_logs` (`object`, `module`, `logs_storage`, `title`, `active`, `class_name`, `class_file`) VALUES
 ('sys_debug', 'system', 'Auto', '_sys_log_debug', 1, '', ''),
-('sys_twilio', 'system', 'Auto', '_sys_log_twilio', 1, '', ''),
+('sys_sms', 'system', 'Auto', '_sys_log_sms', 1, '', ''),
 ('sys_push', 'system', 'Auto', '_sys_log_push', 1, '', ''),
 ('sys_payments', 'system', 'Auto', '_sys_log_payments', 1, '', ''),
 ('sys_cron_jobs', 'system', 'Auto', '_sys_log_cron_jobs', 0, '', ''),
@@ -6690,7 +6736,7 @@ INSERT INTO `sys_preloader`(`module`, `type`, `content`, `active`, `order`) VALU
 ('system', 'js_system', 'jquery.cookie.min.js', 1, 5),
 ('system', 'js_system', 'jquery.form.min.js', 1, 6),
 ('system', 'js_system', 'spin.js/spin.js', 1, 7),
-('system', 'js_system', 'moment-with-locales.js', 1, 8),
+('system', 'js_system', 'moment-with-locales.min.js', 1, 8),
 ('system', 'js_system', 'marka/marka.min.js', 1, 9),
 ('system', 'js_system', 'headroom.min.js', 1, 10),
 ('system', 'js_system', 'at.js/js/jquery.atwho.min.js', 1, 11),

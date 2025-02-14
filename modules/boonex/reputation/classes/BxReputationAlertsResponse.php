@@ -3,8 +3,8 @@
  * Copyright (c) UNA, Inc - https://una.io
  * MIT License - https://opensource.org/licenses/MIT
  *
- * @defdroup    Reputation Reputation
- * @indroup     UnaModules
+ * @defgroup    Reputation Reputation
+ * @ingroup     UnaModules
  *
  * @{
  */
@@ -50,7 +50,7 @@ class BxReputationAlertsResponse extends BxBaseModNotificationsResponse
             return;
 
         $iOwnerId = $oAlert->iSender;
-        $iObjectOwnerId = $this->_getObjectOwnerId($oAlert->aExtras);
+        $iObjectOwnerId = abs($this->_getObjectOwnerId($oAlert->aExtras));
 
         $aEvent = [
             'owner_id' => 0,
@@ -68,7 +68,7 @@ class BxReputationAlertsResponse extends BxBaseModNotificationsResponse
                 'points' => $iPoints
             ]));
 
-            $this->_oModule->_oDb->insertProfile($iOwnerId, $iPoints);
+            $this->_oModule->assignPoints($iOwnerId, $iPoints);
         }
 
         if(($iPoints = (int)$aHandler['points_passive']) != 0 && $iOwnerId != $iObjectOwnerId) {
@@ -77,7 +77,7 @@ class BxReputationAlertsResponse extends BxBaseModNotificationsResponse
                 'points' => $iPoints
             ]));
 
-            $this->_oModule->_oDb->insertProfile($iObjectOwnerId, $iPoints);
+            $this->_oModule->assignPoints($iObjectOwnerId, $iPoints);
         }
     }
 

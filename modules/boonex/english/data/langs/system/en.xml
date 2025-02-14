@@ -986,6 +986,7 @@
 	<string name="_adm_form_txt_field_type_location"><![CDATA[location]]></string>
   <string name="_adm_form_txt_field_type_location_radius"><![CDATA[location radius]]></string>
   <string name="_adm_form_txt_field_type_number"><![CDATA[number]]></string>
+  <string name="_adm_form_txt_field_type_price"><![CDATA[price]]></string>
 	<string name="_adm_form_txt_field_type_password"><![CDATA[password]]></string>
 	<string name="_adm_form_txt_field_type_radio_set"><![CDATA[radio set]]></string>
 	<string name="_adm_form_txt_field_type_reset"><![CDATA[reset]]></string>
@@ -1132,6 +1133,7 @@
     <string name="_adm_lmi_cpt_injections"><![CDATA[Injections]]></string>
     <string name="_adm_lmi_cpt_images"><![CDATA[Images]]></string>
     <string name="_adm_lmi_cpt_items"><![CDATA[Items]]></string>
+    <string name="_adm_lmi_cpt_keys"><![CDATA[Keys]]></string>
     <string name="_adm_lmi_cpt_pgt_settings"><![CDATA[i18n Settings]]></string>
     <string name="_adm_lmi_cpt_pgt_keys"><![CDATA[Text Keys]]></string>
     <string name="_adm_lmi_cpt_labels"><![CDATA[Labels]]></string>
@@ -1528,7 +1530,7 @@
     <string name="_adm_stg_cpt_category_storage"><![CDATA[Storage]]></string>
     <string name="_adm_stg_cpt_category_system"><![CDATA[System]]></string>
     <string name="_adm_stg_cpt_category_templates"><![CDATA[Templates]]></string>
-    <string name="_adm_stg_cpt_category_twilio_gate"><![CDATA[Twilio]]></string>
+    <string name="_adm_stg_cpt_category_sms"><![CDATA[SMS Sending]]></string>
     <string name="_adm_stg_cpt_category_location"><![CDATA[Location]]></string>
     <string name="_adm_stg_cpt_category_social_settings"><![CDATA[Social]]></string>
     <string name="_adm_stg_cpt_category_api_general"><![CDATA[General]]></string>
@@ -1674,16 +1676,18 @@
     <string name="_adm_stg_inf_option_sys_per_page_search_keyword_single"><![CDATA[Set the maximum number of results displayed per page in Keyword Search]]></string>
     <string name="_adm_stg_cpt_option_sys_per_page_search_keyword_plural"><![CDATA[Site Search Results]]></string>
     <string name="_adm_stg_inf_option_sys_per_page_search_keyword_plural"><![CDATA[Set the maximum number of results displayed per page in Site Search]]></string>
-    <string name="_adm_stg_cpt_option_sys_push_app_id"><![CDATA[OneSignal App ID]]></string>
-    <string name="_adm_stg_cpt_option_sys_push_rest_api"><![CDATA[REST API Key]]></string>
-    <string name="_adm_stg_cpt_option_sys_push_short_name"><![CDATA[Short name (required only for http sites. It must match the Subdomain you entered on the Web Push settings on the OneSignal dashboard)]]></string>
-    <string name="_adm_stg_cpt_option_sys_push_safari_id"><![CDATA[Apple Safari Web ID on the Web Push settings]]></string>
+    <string name="_adm_stg_cpt_option_sys_push_default"><![CDATA[Provider]]></string>
+    <string name="_adm_stg_cpt_option_sys_push_onesignal_app_id"><![CDATA[OneSignal: App ID]]></string>
+    <string name="_adm_stg_cpt_option_sys_push_onesignal_rest_api"><![CDATA[OneSignal: REST API Key]]></string>
+    <string name="_adm_stg_cpt_option_sys_push_onesignal_short_name"><![CDATA[OneSignal: Short name (required only for http sites. It must match the Subdomain you entered on the Web Push settings on the OneSignal dashboard)]]></string>
+    <string name="_adm_stg_cpt_option_sys_push_onesignal_safari_id"><![CDATA[OneSignal: Apple Safari Web ID on the Web Push settings]]></string>
     <string name="_adm_stg_cpt_option_sys_push_queue_time"><![CDATA[Push queue execution flag]]></string>
     <string name="_adm_stg_cpt_option_sys_push_queue_send_per_start"><![CDATA[Number of messages to send from Push queue per run]]></string>
     <string name="_adm_stg_cpt_option_sys_push_queue_send_per_start_to_recipient"><![CDATA[Number of messages to send from Push queue per run to some recipient]]></string>
-    <string name="_adm_stg_cpt_option_sys_twilio_gate_sid"><![CDATA[Account SID]]></string>
-    <string name="_adm_stg_cpt_option_sys_twilio_gate_token"><![CDATA[Auth token]]></string>
-    <string name="_adm_stg_cpt_option_sys_twilio_gate_from_number"><![CDATA[Default 'From' number for SMS]]></string>    
+    <string name="_adm_stg_cpt_option_sys_sms_default"><![CDATA[Provider]]></string>
+    <string name="_adm_stg_cpt_option_sys_sms_twilio_sid"><![CDATA[Twilio: Account SID]]></string>
+    <string name="_adm_stg_cpt_option_sys_sms_twilio_token"><![CDATA[Twilio: Auth token]]></string>
+    <string name="_adm_stg_cpt_option_sys_sms_twilio_from_number"><![CDATA[Twilio: Default 'From' number for SMS]]></string>    
     <string name="_adm_stg_cpt_option_sys_nominatim_server"><![CDATA[Nominatim server URL]]></string>    
     <string name="_adm_stg_cpt_option_sys_nominatim_email"><![CDATA[Nominatim email to identify requests]]></string>
     <string name="_adm_stg_cpt_option_sys_recaptcha_key_private"><![CDATA[reCAPTCHA/hCaptcha private key]]></string>
@@ -1732,6 +1736,7 @@
     <string name="_adm_stg_cpt_option_sys_default_socket_timeout"><![CDATA[HTTP context read timeout (in seconds, -1 - unlimit)]]></string>
     <string name="_adm_stg_cpt_option_sys_ssl_allow_untrusted"><![CDATA[cURL - trust unsigned certificates or not verified hosts]]></string>
     <string name="_adm_stg_cpt_option_sys_csp_frame_ancestors"><![CDATA['Content-Security-Policy: frame-ancestors' header value]]></string>
+    <string name="_adm_stg_cpt_option_sys_x_frame_options"><![CDATA['X-Frame-Options' header value (Off - don't send this header)]]></string>
     <string name="_adm_stg_cpt_option_sys_samesite_cookies"><![CDATA[SameSite value for sensitive cookies]]></string>
     <string name="_adm_stg_cpt_option_sys_notify_to_approve_by_role"><![CDATA[Notify context member with necessary role to approve content in the context]]></string>
     <string name="_adm_stg_cpt_option_sys_fixed_header"><![CDATA[Fixed header]]></string>
@@ -1758,8 +1763,10 @@
     <string name="_adm_stg_cpt_option_sys_metatags_hashtags_max"><![CDATA[Max number of hashtags per post]]></string>
     <string name="_adm_stg_cpt_option_sys_metatags_mentions_max"><![CDATA[Max number of mentions per post]]></string>
     <string name="_adm_stg_cpt_option_sys_attach_links_max"><![CDATA[Max number of attached links per post (0 - no limit)]]></string>
+    <string name="_adm_stg_cpt_option_sys_enable_post_to_context_for_privacy"><![CDATA[Allow to post to context using Privacy field]]></string>
     <string name="_adm_stg_cpt_option_sys_hide_post_to_context_for_privacy"><![CDATA[Hide post to context for modules in Privacy field]]></string>
     <string name="_adm_stg_cpt_option_sys_treat_cxt_in_cxt_as_cnt"><![CDATA[Treat context posted in context as content]]></string>
+    <string name="_adm_stg_cpt_option_sys_check_fan_in_parent_context"><![CDATA[Only parent group(space, event, etc) members can join]]></string>
     <string name="_adm_stg_cpt_option_sys_search_keyword_min_len"><![CDATA[Keyword min length in site search]]></string>
     <string name="_adm_stg_cpt_option_sys_profile_bot"><![CDATA[System Bot profile]]></string>
     <string name="_adm_stg_inf_option_sys_profile_bot"><![CDATA[Choose profile which will be used as an author of system actions.]]></string>
@@ -3095,7 +3102,7 @@ If it is not enabled then please consider implement this optimization, since it 
 	<string name="_sys_loading"><![CDATA[Loading...]]></string>
 	<string name="_sys_location_country"><![CDATA[<i class="sys-icon location-arrow"></i> {0}]]></string>
 	<string name="_sys_location_country_city"><![CDATA[<i class="sys-icon location-arrow"></i> {2}, {1}, {0}]]></string>
-    <string name="_sys_location_country_city_street"><![CDATA[<i class="sys-icon location-arrow"></i> {4} {3}, {2}, {1}, {0} ]]></string>
+        <string name="_sys_location_country_city_street"><![CDATA[<i class="sys-icon location-arrow"></i> {4} {3}, {2}, {1}, {0} ]]></string>
 	<string name="_sys_location_determining"><![CDATA[Determining location...]]></string>
 	<string name="_sys_location_geolocation_not_supported_by_browser"><![CDATA[Geolocation is not supported by this browser]]></string>
 	<string name="_sys_location_undefined"><![CDATA[Location undefined]]></string>
@@ -3112,12 +3119,12 @@ If it is not enabled then please consider implement this optimization, since it 
     <string name="_sys_location_status_undef"><![CDATA[Address is undefined]]></string>
     <string name="_sys_location_status_ok"><![CDATA[Address found]]></string>
     <string name="_sys_location_status_fail"><![CDATA[Address not found]]></string>
-	<string name="_sys_log_debug"><![CDATA[System: debug]]></string>
-    <string name="_sys_log_twilio"><![CDATA[System: Twilio]]></string>
+    <string name="_sys_log_debug"><![CDATA[System: debug]]></string>
+    <string name="_sys_log_sms"><![CDATA[System: SMS]]></string>
     <string name="_sys_log_push"><![CDATA[System: PUSH]]></string>
-	<string name="_sys_log_payments"><![CDATA[System: Payments]]></string>
-	<string name="_sys_log_cron_jobs"><![CDATA[System: Cron jobs]]></string>
-	<string name="_sys_log_transcoder"><![CDATA[System: Transcoder]]></string>
+    <string name="_sys_log_payments"><![CDATA[System: Payments]]></string>
+    <string name="_sys_log_cron_jobs"><![CDATA[System: Cron jobs]]></string>
+    <string name="_sys_log_transcoder"><![CDATA[System: Transcoder]]></string>
     <string name="_sys_macros_malformed"><![CDATA[Error: malformed macros]]></string>
     <string name="_sys_macros_unsafe"><![CDATA[Error: unsafe macros]]></string>
     <string name="_sys_macros_output_not_displayable"><![CDATA[Error: output isn't displayable]]></string>
@@ -3790,14 +3797,14 @@ If it is not enabled then please consider implement this optimization, since it 
             <li><b>{0}</b> total</li>
             <li><b>{1}</b> deleted</li>
         </ul>]]></string>
-    <string name="_sys_ps_group_title_memberships_selected"><![CDATA[Selected Membership Levels...]]></string>
+    <string name="_sys_ps_group_title_memberships_selected"><![CDATA[Specific membership levels...]]></string>
     <string name="_sys_ps_group_title_custom"><![CDATA[Custom]]></string>
     <string name="_sys_ps_group_title_followers"><![CDATA[Followers]]></string>
     <string name="_sys_ps_group_title_friends"><![CDATA[Friends]]></string>
-    <string name="_sys_ps_group_title_friends_selected"><![CDATA[Selected Friends...]]></string>
+    <string name="_sys_ps_group_title_friends_selected"><![CDATA[Specific friends...]]></string>
     <string name="_sys_ps_group_title_relations"><![CDATA[Relationships]]></string>
-    <string name="_sys_ps_group_title_relations_selected"><![CDATA[Selected Relationships...]]></string>
-    <string name="_sys_ps_group_title_me_only"><![CDATA[Me only]]></string>
+    <string name="_sys_ps_group_title_relations_selected"><![CDATA[Specific relationships...]]></string>
+    <string name="_sys_ps_group_title_me_only"><![CDATA[Only me]]></string>
     <string name="_sys_ps_group_title_members"><![CDATA[Members]]></string>
     <string name="_sys_ps_group_title_public"><![CDATA[Public]]></string>
     <string name="_sys_ps_group_title_participants"><![CDATA[Participants]]></string>
@@ -3960,6 +3967,7 @@ If it is not enabled then please consider implement this optimization, since it 
     <string name="_sys_txt_error_profile_is_not_defined"><![CDATA[Profile is not defined]]></string>
     <string name="_sys_txt_error_profile_update"><![CDATA[Profile update failed]]></string>
     <string name="_sys_txt_err_sound_not_transcoded_yet"><![CDATA[Sound file isn't transcoded yet]]></string>
+    <string name="_sys_txt_forms_unknown_field_err"><![CDATA['{0}' field is unknown]]></string>
     <string name="_sys_txt_field_created"><![CDATA[Created:]]></string>
     <string name="_sys_txt_field_updated"><![CDATA[Updated:]]></string>
     <string name="_sys_txt_forgot_pasword"><![CDATA[Forgot password?]]></string>
