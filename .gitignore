@@ -41,3 +41,9 @@ modules/vendor
 
 # Exclude IDE project folder
 .idea
+
+# Ignore the .env file
+.env
+
+# Allow the .env.example file
+!.env.example
