@@ -390,10 +390,25 @@ class BxBaseFormView extends BxDolForm
                     $oStorage = BxDolStorage::getObjectInstance($aInput['storage_object']);
                     $aInput['ext_allow'] = $oStorage->getObjectData()['ext_allow'];
                     $aInput['ext_deny'] = $oStorage->getObjectData()['ext_deny'];
+                    
                     $aInput['ghost_template'] = '';
                     $aInput['value'] = '';
                     $aInput['values'] = '';
                     $aInput['values_src'] = '';
+                    if (!empty($aInput['content_id'])){
+                        $oUploader = BxDolUploader::getObjectInstance($aInput['uploaders'][0], $aInput['storage_object'], genRndPwd(8));
+                        $oData = $oUploader->getGhostsWithOrder((int)bx_get_logged_profile_id(), 'json', $aInput['images_transcoder'], $aInput['content_id']);
+                        if ($oData){
+                            $aData = json_decode($oData, true);
+                            $aInput['values_src'] = array_values($aData['g']);
+                            $aGhostIds = [];
+                            foreach ($aData['g'] as &$aGhost) {
+                                $aGhostIds[] = $aGhost['file_id'];
+                            }
+                            $aInput['value'] = implode(',', $aGhostIds);
+                        }
+                      
+                    }
                 }
                 
                 if (isset($aInput['type']) && 'custom' == $aInput['type']){
@@ -650,7 +665,7 @@ BLAH;
         foreach ($this->aInputs as &$aInput) {
     
             if (!isset($aInput['visible_for_levels']) || self::isVisible($aInput)) {
-                if ('block_header' == $aInput['type'] && !$this->_bShowEmptySections) {
+                if ((isset($aInput['type']) && 'block_header' == $aInput['type']) && !$this->_bShowEmptySections) {
                     // don't show section with no fields or with empty fields
                     if ($sContHeader) {                        
                         if ($sContFields)
@@ -1056,7 +1071,7 @@ BLAH;
         $sClassOneLineCaption = '';
         $sClassOneLineValue = '';
         if ($isOneLine) {
-            $sClassOneLineCaption = ' bx-form-caption-oneline bx-form-caption-oneline-' . $aInput['type'] . ' bx-def-margin-left';
+            $sClassOneLineCaption = ' bx-form-caption-oneline bx-form-caption-oneline-' . $aInput['type'] . ' ltr:ml-4 rtl:mr-4';
             $sClassOneLineValue = ' bx-form-value-oneline bx-form-value-oneline-' . $aInput['type'];
             if (!isset($aInput['attrs']) || !is_array($aInput['attrs']))
                 $aInput['attrs'] = [];

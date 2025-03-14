@@ -822,7 +822,6 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
                 if(!empty($aParams['request_params']) && is_array($aParams['request_params']))
                     $sRequestUrl = bx_append_url_params($sRequestUrl, $aParams['request_params']);
 
-                bx_append_url_params($sUrl, $mixedParams);
                 $aResult = bx_api_get_block('form', $mixedData, [
                     'ext' => [
                         'name' => $sModule, 
@@ -839,11 +838,15 @@ class BxBaseModGeneralFormsEntryHelper extends BxDolProfileForms
     {
         $CNF = &$this->_oModule->_oConfig->CNF;
 
-        $sKeyUri = 'URI_' . strtoupper($sType) . '_ENTRY';
-        if(empty($CNF[$sKeyUri]))
+        $sUri = '';
+        if(($sKeyUri = 'URI_' . strtoupper($sType) . '_ENTRY') && !empty($CNF[$sKeyUri]))
+            $sUri = $CNF[$sKeyUri];
+        if(!$sUri && $sType == 'add' && ($sKeyUri = 'URI_EDIT_ENTRY') && !empty($CNF[$sKeyUri]))
+            $sUri = str_replace('edit', 'create', $CNF[$sKeyUri]);
+        if(!$sUri)
             return;
 
-        $oForm->setAbsoluteActionUrl(bx_absolute_url(BxDolPermalinks::getInstance()->permalink('page.php?i=' . $CNF[$sKeyUri])));
+        $oForm->setAbsoluteActionUrl(bx_absolute_url(BxDolPermalinks::getInstance()->permalink('page.php?i=' . $sUri)));
     }
 
     protected function _getRedirectFromContext($sAction, $aContentInfo)

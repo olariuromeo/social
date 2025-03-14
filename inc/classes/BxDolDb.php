@@ -20,7 +20,7 @@ define('BX_PDO_STATE_SUCCESS', '00000');
 class BxDolDb extends BxDolFactory implements iBxDolSingleton
 {	
     protected static $_rLink;
-    protected static $_aDbCacheData;
+    protected static $_aDbCacheData = [];
 
     protected static $_aParams;
     protected static $_sParamsCacheName = 'sys_options';
@@ -157,6 +157,8 @@ class BxDolDb extends BxDolFactory implements iBxDolSingleton
 
     protected function balancer()
     {
+        self::$_bMultuServersMode = false;
+
         // regular mode - one DB server
         if (!is_array($this->_sHost))
             return array($this->_sHost, $this->_sPort, $this->_sSocket, $this->_sUser, $this->_sPassword, $this->_sDbname);
@@ -279,6 +281,8 @@ class BxDolDb extends BxDolFactory implements iBxDolSingleton
 			);
 
     	$this->error($oException->errorInfo[self::$_sErrorKey]);
+
+        exit(255);
     }
 
     /**
